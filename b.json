@@ -1,0 +1,1444 @@
+{
+  "sss.v": {
+    "tree": {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "end": 6,
+                  "start": 0,
+                  "tag": "module"
+                },
+                null,
+                {
+                  "end": 16,
+                  "start": 7,
+                  "tag": "SymbolIdentifier",
+                  "text": "counter10"
+                },
+                null,
+                null,
+                {
+                  "children": [
+                    {
+                      "end": 17,
+                      "start": 16,
+                      "tag": "("
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "end": 27,
+                              "start": 22,
+                              "tag": "input"
+                            },
+                            {
+                              "end": 38,
+                              "start": 34,
+                              "tag": "wire"
+                            },
+                            {
+                              "children": [
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "tag": "kDataType"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 50,
+                                  "start": 46,
+                                  "tag": "SymbolIdentifier",
+                                  "text": "rstn"
+                                },
+                                null
+                              ],
+                              "tag": "kUnqualifiedId"
+                            },
+                            {
+                              "children": [
+                                null
+                              ],
+                              "tag": "kUnpackedDimensions"
+                            },
+                            null
+                          ],
+                          "tag": "kPortDeclaration"
+                        },
+                        {
+                          "end": 51,
+                          "start": 50,
+                          "tag": ","
+                        },
+                        {
+                          "children": [
+                            {
+                              "end": 61,
+                              "start": 56,
+                              "tag": "input"
+                            },
+                            {
+                              "end": 72,
+                              "start": 68,
+                              "tag": "wire"
+                            },
+                            {
+                              "children": [
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "tag": "kDataType"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 83,
+                                  "start": 80,
+                                  "tag": "SymbolIdentifier",
+                                  "text": "clk"
+                                },
+                                null
+                              ],
+                              "tag": "kUnqualifiedId"
+                            },
+                            {
+                              "children": [
+                                null
+                              ],
+                              "tag": "kUnpackedDimensions"
+                            },
+                            null
+                          ],
+                          "tag": "kPortDeclaration"
+                        },
+                        {
+                          "end": 84,
+                          "start": 83,
+                          "tag": ","
+                        },
+                        {
+                          "children": [
+                            {
+                              "end": 95,
+                              "start": 89,
+                              "tag": "output"
+                            },
+                            {
+                              "end": 105,
+                              "start": 101,
+                              "tag": "wire"
+                            },
+                            {
+                              "children": [
+                                null,
+                                null,
+                                null,
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "end": 106,
+                                              "start": 105,
+                                              "tag": "["
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 107,
+                                                      "start": 106,
+                                                      "tag": "TK_DecNumber",
+                                                      "text": "3"
+                                                    }
+                                                  ],
+                                                  "tag": "kNumber"
+                                                }
+                                              ],
+                                              "tag": "kExpression"
+                                            },
+                                            {
+                                              "end": 108,
+                                              "start": 107,
+                                              "tag": ":"
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 109,
+                                                      "start": 108,
+                                                      "tag": "TK_DecNumber",
+                                                      "text": "0"
+                                                    }
+                                                  ],
+                                                  "tag": "kNumber"
+                                                }
+                                              ],
+                                              "tag": "kExpression"
+                                            },
+                                            {
+                                              "end": 110,
+                                              "start": 109,
+                                              "tag": "]"
+                                            }
+                                          ],
+                                          "tag": "kDimensionRange"
+                                        }
+                                      ],
+                                      "tag": "kDeclarationDimensions"
+                                    }
+                                  ],
+                                  "tag": "kPackedDimensions"
+                                }
+                              ],
+                              "tag": "kDataType"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 116,
+                                  "start": 113,
+                                  "tag": "SymbolIdentifier",
+                                  "text": "cnt"
+                                },
+                                null
+                              ],
+                              "tag": "kUnqualifiedId"
+                            },
+                            {
+                              "children": [
+                                null
+                              ],
+                              "tag": "kUnpackedDimensions"
+                            },
+                            null
+                          ],
+                          "tag": "kPortDeclaration"
+                        },
+                        {
+                          "end": 117,
+                          "start": 116,
+                          "tag": ","
+                        },
+                        {
+                          "children": [
+                            {
+                              "end": 128,
+                              "start": 122,
+                              "tag": "output"
+                            },
+                            {
+                              "end": 138,
+                              "start": 134,
+                              "tag": "wire"
+                            },
+                            {
+                              "children": [
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "tag": "kDataType"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 150,
+                                  "start": 146,
+                                  "tag": "SymbolIdentifier",
+                                  "text": "cout"
+                                },
+                                null
+                              ],
+                              "tag": "kUnqualifiedId"
+                            },
+                            {
+                              "children": [
+                                null
+                              ],
+                              "tag": "kUnpackedDimensions"
+                            },
+                            null
+                          ],
+                          "tag": "kPortDeclaration"
+                        },
+                        {
+                          "end": 151,
+                          "start": 150,
+                          "tag": ","
+                        },
+                        {
+                          "children": [
+                            null,
+                            null,
+                            {
+                              "children": [
+                                null,
+                                {
+                                  "children": [
+                                    {
+                                      "end": 160,
+                                      "start": 157,
+                                      "tag": "reg"
+                                    },
+                                    null
+                                  ],
+                                  "tag": "kDataTypePrimitive"
+                                },
+                                null,
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "end": 162,
+                                              "start": 161,
+                                              "tag": "["
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 163,
+                                                      "start": 162,
+                                                      "tag": "TK_DecNumber",
+                                                      "text": "3"
+                                                    }
+                                                  ],
+                                                  "tag": "kNumber"
+                                                }
+                                              ],
+                                              "tag": "kExpression"
+                                            },
+                                            {
+                                              "end": 164,
+                                              "start": 163,
+                                              "tag": ":"
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 165,
+                                                      "start": 164,
+                                                      "tag": "TK_DecNumber",
+                                                      "text": "0"
+                                                    }
+                                                  ],
+                                                  "tag": "kNumber"
+                                                }
+                                              ],
+                                              "tag": "kExpression"
+                                            },
+                                            {
+                                              "end": 166,
+                                              "start": 165,
+                                              "tag": "]"
+                                            }
+                                          ],
+                                          "tag": "kDimensionRange"
+                                        }
+                                      ],
+                                      "tag": "kDeclarationDimensions"
+                                    }
+                                  ],
+                                  "tag": "kPackedDimensions"
+                                }
+                              ],
+                              "tag": "kDataType"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 189,
+                                  "start": 181,
+                                  "tag": "SymbolIdentifier",
+                                  "text": "cnt_temp"
+                                }
+                              ],
+                              "tag": "kUnqualifiedId"
+                            },
+                            {
+                              "children": [
+                                null
+                              ],
+                              "tag": "kUnpackedDimensions"
+                            },
+                            null
+                          ],
+                          "tag": "kPortDeclaration"
+                        }
+                      ],
+                      "tag": "kPortDeclarationList"
+                    },
+                    {
+                      "end": 191,
+                      "start": 190,
+                      "tag": ")"
+                    }
+                  ],
+                  "tag": "kParenGroup"
+                },
+                null,
+                {
+                  "end": 192,
+                  "start": 191,
+                  "tag": ";"
+                }
+              ],
+              "tag": "kModuleHeader"
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "end": 204,
+                      "start": 198,
+                      "tag": "always"
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "end": 205,
+                              "start": 204,
+                              "tag": "@"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 206,
+                                  "start": 205,
+                                  "tag": "("
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "end": 213,
+                                          "start": 206,
+                                          "tag": "posedge"
+                                        },
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "end": 217,
+                                                              "start": 214,
+                                                              "tag": "SymbolIdentifier",
+                                                              "text": "clk"
+                                                            },
+                                                            null
+                                                          ],
+                                                          "tag": "kUnqualifiedId"
+                                                        }
+                                                      ],
+                                                      "tag": "kLocalRoot"
+                                                    }
+                                                  ],
+                                                  "tag": "kReference"
+                                                }
+                                              ],
+                                              "tag": "kReferenceCallBase"
+                                            }
+                                          ],
+                                          "tag": "kExpression"
+                                        }
+                                      ],
+                                      "tag": "kEventExpression"
+                                    },
+                                    {
+                                      "end": 220,
+                                      "start": 218,
+                                      "tag": "or"
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "end": 228,
+                                          "start": 221,
+                                          "tag": "negedge"
+                                        },
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "end": 233,
+                                                              "start": 229,
+                                                              "tag": "SymbolIdentifier",
+                                                              "text": "rstn"
+                                                            },
+                                                            null
+                                                          ],
+                                                          "tag": "kUnqualifiedId"
+                                                        }
+                                                      ],
+                                                      "tag": "kLocalRoot"
+                                                    }
+                                                  ],
+                                                  "tag": "kReference"
+                                                }
+                                              ],
+                                              "tag": "kReferenceCallBase"
+                                            }
+                                          ],
+                                          "tag": "kExpression"
+                                        }
+                                      ],
+                                      "tag": "kEventExpression"
+                                    }
+                                  ],
+                                  "tag": "kEventExpressionList"
+                                },
+                                {
+                                  "end": 234,
+                                  "start": 233,
+                                  "tag": ")"
+                                }
+                              ],
+                              "tag": "kParenGroup"
+                            }
+                          ],
+                          "tag": "kEventControl"
+                        },
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "end": 240,
+                                  "start": 235,
+                                  "tag": "begin"
+                                },
+                                null
+                              ],
+                              "tag": "kBegin"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            null,
+                                            {
+                                              "end": 251,
+                                              "start": 249,
+                                              "tag": "if"
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "end": 252,
+                                                  "start": 251,
+                                                  "tag": "("
+                                                },
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "end": 253,
+                                                          "start": 252,
+                                                          "tag": "!"
+                                                        },
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "end": 258,
+                                                                          "start": 254,
+                                                                          "tag": "SymbolIdentifier",
+                                                                          "text": "rstn"
+                                                                        },
+                                                                        null
+                                                                      ],
+                                                                      "tag": "kUnqualifiedId"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kLocalRoot"
+                                                                }
+                                                              ],
+                                                              "tag": "kReference"
+                                                            }
+                                                          ],
+                                                          "tag": "kReferenceCallBase"
+                                                        }
+                                                      ],
+                                                      "tag": "kUnaryPrefixExpression"
+                                                    }
+                                                  ],
+                                                  "tag": "kExpression"
+                                                },
+                                                {
+                                                  "end": 259,
+                                                  "start": 258,
+                                                  "tag": ")"
+                                                }
+                                              ],
+                                              "tag": "kParenGroup"
+                                            }
+                                          ],
+                                          "tag": "kIfHeader"
+                                        },
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 264,
+                                                      "start": 259,
+                                                      "tag": "begin"
+                                                    },
+                                                    null
+                                                  ],
+                                                  "tag": "kBegin"
+                                                },
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "end": 285,
+                                                                              "start": 277,
+                                                                              "tag": "SymbolIdentifier",
+                                                                              "text": "cnt_temp"
+                                                                            },
+                                                                            null
+                                                                          ],
+                                                                          "tag": "kUnqualifiedId"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kLocalRoot"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kReference"
+                                                                }
+                                                              ],
+                                                              "tag": "kReferenceCallBase"
+                                                            }
+                                                          ],
+                                                          "tag": "kLPValue"
+                                                        },
+                                                        {
+                                                          "end": 295,
+                                                          "start": 293,
+                                                          "tag": "<="
+                                                        },
+                                                        null,
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "end": 297,
+                                                                  "start": 296,
+                                                                  "tag": "TK_DecNumber",
+                                                                  "text": "4"
+                                                                },
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "end": 299,
+                                                                      "start": 297,
+                                                                      "tag": "TK_BinBase",
+                                                                      "text": "'b"
+                                                                    },
+                                                                    {
+                                                                      "end": 300,
+                                                                      "start": 299,
+                                                                      "tag": "TK_BinDigits",
+                                                                      "text": "0"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kBaseDigits"
+                                                                }
+                                                              ],
+                                                              "tag": "kNumber"
+                                                            }
+                                                          ],
+                                                          "tag": "kExpression"
+                                                        },
+                                                        {
+                                                          "end": 302,
+                                                          "start": 301,
+                                                          "tag": ";"
+                                                        }
+                                                      ],
+                                                      "tag": "kNonblockingAssignmentStatement"
+                                                    }
+                                                  ],
+                                                  "tag": "kBlockItemStatementList"
+                                                },
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 314,
+                                                      "start": 311,
+                                                      "tag": "end"
+                                                    },
+                                                    null
+                                                  ],
+                                                  "tag": "kEnd"
+                                                }
+                                              ],
+                                              "tag": "kSeqBlock"
+                                            }
+                                          ],
+                                          "tag": "kIfBody"
+                                        }
+                                      ],
+                                      "tag": "kIfClause"
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "end": 327,
+                                          "start": 323,
+                                          "tag": "else"
+                                        },
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        null,
+                                                        {
+                                                          "end": 330,
+                                                          "start": 328,
+                                                          "tag": "if"
+                                                        },
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "end": 332,
+                                                              "start": 331,
+                                                              "tag": "("
+                                                            },
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "end": 340,
+                                                                                      "start": 332,
+                                                                                      "tag": "SymbolIdentifier",
+                                                                                      "text": "cnt_temp"
+                                                                                    },
+                                                                                    null
+                                                                                  ],
+                                                                                  "tag": "kUnqualifiedId"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kLocalRoot"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kReference"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kReferenceCallBase"
+                                                                    },
+                                                                    {
+                                                                      "end": 342,
+                                                                      "start": 340,
+                                                                      "tag": "=="
+                                                                    },
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "end": 343,
+                                                                          "start": 342,
+                                                                          "tag": "TK_DecNumber",
+                                                                          "text": "4"
+                                                                        },
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "end": 345,
+                                                                              "start": 343,
+                                                                              "tag": "TK_DecBase",
+                                                                              "text": "'d"
+                                                                            },
+                                                                            {
+                                                                              "end": 346,
+                                                                              "start": 345,
+                                                                              "tag": "TK_DecDigits",
+                                                                              "text": "9"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kBaseDigits"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kNumber"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kBinaryExpression"
+                                                                }
+                                                              ],
+                                                              "tag": "kExpression"
+                                                            },
+                                                            {
+                                                              "end": 347,
+                                                              "start": 346,
+                                                              "tag": ")"
+                                                            }
+                                                          ],
+                                                          "tag": "kParenGroup"
+                                                        }
+                                                      ],
+                                                      "tag": "kIfHeader"
+                                                    },
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "end": 353,
+                                                                  "start": 348,
+                                                                  "tag": "begin"
+                                                                },
+                                                                null
+                                                              ],
+                                                              "tag": "kBegin"
+                                                            },
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "end": 374,
+                                                                                          "start": 366,
+                                                                                          "tag": "SymbolIdentifier",
+                                                                                          "text": "cnt_temp"
+                                                                                        },
+                                                                                        null
+                                                                                      ],
+                                                                                      "tag": "kUnqualifiedId"
+                                                                                    }
+                                                                                  ],
+                                                                                  "tag": "kLocalRoot"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kReference"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kReferenceCallBase"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kLPValue"
+                                                                    },
+                                                                    {
+                                                                      "end": 384,
+                                                                      "start": 382,
+                                                                      "tag": "<="
+                                                                    },
+                                                                    null,
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "end": 385,
+                                                                              "start": 384,
+                                                                              "tag": "TK_DecNumber",
+                                                                              "text": "4"
+                                                                            },
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "end": 387,
+                                                                                  "start": 385,
+                                                                                  "tag": "TK_BinBase",
+                                                                                  "text": "'b"
+                                                                                },
+                                                                                {
+                                                                                  "end": 390,
+                                                                                  "start": 387,
+                                                                                  "tag": "TK_BinDigits",
+                                                                                  "text": "000"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kBaseDigits"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kNumber"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kExpression"
+                                                                    },
+                                                                    {
+                                                                      "end": 391,
+                                                                      "start": 390,
+                                                                      "tag": ";"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kNonblockingAssignmentStatement"
+                                                                }
+                                                              ],
+                                                              "tag": "kBlockItemStatementList"
+                                                            },
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "end": 403,
+                                                                  "start": 400,
+                                                                  "tag": "end"
+                                                                },
+                                                                null
+                                                              ],
+                                                              "tag": "kEnd"
+                                                            }
+                                                          ],
+                                                          "tag": "kSeqBlock"
+                                                        }
+                                                      ],
+                                                      "tag": "kIfBody"
+                                                    }
+                                                  ],
+                                                  "tag": "kIfClause"
+                                                },
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 416,
+                                                      "start": 412,
+                                                      "tag": "else"
+                                                    },
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "end": 422,
+                                                                  "start": 417,
+                                                                  "tag": "begin"
+                                                                },
+                                                                null
+                                                              ],
+                                                              "tag": "kBegin"
+                                                            },
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "children": [
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "end": 443,
+                                                                                          "start": 435,
+                                                                                          "tag": "SymbolIdentifier",
+                                                                                          "text": "cnt_temp"
+                                                                                        },
+                                                                                        null
+                                                                                      ],
+                                                                                      "tag": "kUnqualifiedId"
+                                                                                    }
+                                                                                  ],
+                                                                                  "tag": "kLocalRoot"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kReference"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kReferenceCallBase"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kLPValue"
+                                                                    },
+                                                                    {
+                                                                      "end": 453,
+                                                                      "start": 451,
+                                                                      "tag": "<="
+                                                                    },
+                                                                    null,
+                                                                    {
+                                                                      "children": [
+                                                                        {
+                                                                          "children": [
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "children": [
+                                                                                        {
+                                                                                          "children": [
+                                                                                            {
+                                                                                              "end": 462,
+                                                                                              "start": 454,
+                                                                                              "tag": "SymbolIdentifier",
+                                                                                              "text": "cnt_temp"
+                                                                                            },
+                                                                                            null
+                                                                                          ],
+                                                                                          "tag": "kUnqualifiedId"
+                                                                                        }
+                                                                                      ],
+                                                                                      "tag": "kLocalRoot"
+                                                                                    }
+                                                                                  ],
+                                                                                  "tag": "kReference"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kReferenceCallBase"
+                                                                            },
+                                                                            {
+                                                                              "end": 464,
+                                                                              "start": 463,
+                                                                              "tag": "+"
+                                                                            },
+                                                                            {
+                                                                              "children": [
+                                                                                {
+                                                                                  "end": 466,
+                                                                                  "start": 465,
+                                                                                  "tag": "TK_DecNumber",
+                                                                                  "text": "1"
+                                                                                },
+                                                                                {
+                                                                                  "children": [
+                                                                                    {
+                                                                                      "end": 468,
+                                                                                      "start": 466,
+                                                                                      "tag": "TK_BinBase",
+                                                                                      "text": "'b"
+                                                                                    },
+                                                                                    {
+                                                                                      "end": 469,
+                                                                                      "start": 468,
+                                                                                      "tag": "TK_BinDigits",
+                                                                                      "text": "1"
+                                                                                    }
+                                                                                  ],
+                                                                                  "tag": "kBaseDigits"
+                                                                                }
+                                                                              ],
+                                                                              "tag": "kNumber"
+                                                                            }
+                                                                          ],
+                                                                          "tag": "kBinaryExpression"
+                                                                        }
+                                                                      ],
+                                                                      "tag": "kExpression"
+                                                                    },
+                                                                    {
+                                                                      "end": 471,
+                                                                      "start": 470,
+                                                                      "tag": ";"
+                                                                    }
+                                                                  ],
+                                                                  "tag": "kNonblockingAssignmentStatement"
+                                                                }
+                                                              ],
+                                                              "tag": "kBlockItemStatementList"
+                                                            },
+                                                            {
+                                                              "children": [
+                                                                {
+                                                                  "end": 483,
+                                                                  "start": 480,
+                                                                  "tag": "end"
+                                                                },
+                                                                null
+                                                              ],
+                                                              "tag": "kEnd"
+                                                            }
+                                                          ],
+                                                          "tag": "kSeqBlock"
+                                                        }
+                                                      ],
+                                                      "tag": "kElseBody"
+                                                    }
+                                                  ],
+                                                  "tag": "kElseClause"
+                                                }
+                                              ],
+                                              "tag": "kConditionalStatement"
+                                            }
+                                          ],
+                                          "tag": "kElseBody"
+                                        }
+                                      ],
+                                      "tag": "kElseClause"
+                                    }
+                                  ],
+                                  "tag": "kConditionalStatement"
+                                }
+                              ],
+                              "tag": "kBlockItemStatementList"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "end": 491,
+                                  "start": 488,
+                                  "tag": "end"
+                                },
+                                null
+                              ],
+                              "tag": "kEnd"
+                            }
+                          ],
+                          "tag": "kSeqBlock"
+                        }
+                      ],
+                      "tag": "kProceduralTimingControlStatement"
+                    }
+                  ],
+                  "tag": "kAlwaysStatement"
+                },
+                {
+                  "children": [
+                    {
+                      "end": 503,
+                      "start": 497,
+                      "tag": "assign"
+                    },
+                    null,
+                    null,
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "end": 509,
+                                                  "start": 505,
+                                                  "tag": "SymbolIdentifier",
+                                                  "text": "cout"
+                                                },
+                                                null
+                                              ],
+                                              "tag": "kUnqualifiedId"
+                                            }
+                                          ],
+                                          "tag": "kLocalRoot"
+                                        }
+                                      ],
+                                      "tag": "kReference"
+                                    }
+                                  ],
+                                  "tag": "kReferenceCallBase"
+                                }
+                              ],
+                              "tag": "kLPValue"
+                            },
+                            {
+                              "end": 511,
+                              "start": 510,
+                              "tag": "="
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "end": 513,
+                                      "start": 512,
+                                      "tag": "("
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "children": [
+                                                        {
+                                                          "children": [
+                                                            {
+                                                              "end": 521,
+                                                              "start": 513,
+                                                              "tag": "SymbolIdentifier",
+                                                              "text": "cnt_temp"
+                                                            },
+                                                            null
+                                                          ],
+                                                          "tag": "kUnqualifiedId"
+                                                        }
+                                                      ],
+                                                      "tag": "kLocalRoot"
+                                                    }
+                                                  ],
+                                                  "tag": "kReference"
+                                                }
+                                              ],
+                                              "tag": "kReferenceCallBase"
+                                            },
+                                            {
+                                              "end": 523,
+                                              "start": 521,
+                                              "tag": "=="
+                                            },
+                                            {
+                                              "children": [
+                                                {
+                                                  "end": 524,
+                                                  "start": 523,
+                                                  "tag": "TK_DecNumber",
+                                                  "text": "4"
+                                                },
+                                                {
+                                                  "children": [
+                                                    {
+                                                      "end": 526,
+                                                      "start": 524,
+                                                      "tag": "TK_DecBase",
+                                                      "text": "'d"
+                                                    },
+                                                    {
+                                                      "end": 527,
+                                                      "start": 526,
+                                                      "tag": "TK_DecDigits",
+                                                      "text": "9"
+                                                    }
+                                                  ],
+                                                  "tag": "kBaseDigits"
+                                                }
+                                              ],
+                                              "tag": "kNumber"
+                                            }
+                                          ],
+                                          "tag": "kBinaryExpression"
+                                        }
+                                      ],
+                                      "tag": "kExpression"
+                                    },
+                                    {
+                                      "end": 528,
+                                      "start": 527,
+                                      "tag": ")"
+                                    }
+                                  ],
+                                  "tag": "kParenGroup"
+                                }
+                              ],
+                              "tag": "kExpression"
+                            }
+                          ],
+                          "tag": "kNetVariableAssignment"
+                        }
+                      ],
+                      "tag": "kAssignmentList"
+                    },
+                    {
+                      "end": 530,
+                      "start": 529,
+                      "tag": ";"
+                    }
+                  ],
+                  "tag": "kContinuousAssignmentStatement"
+                },
+                {
+                  "children": [
+                    {
+                      "end": 541,
+                      "start": 535,
+                      "tag": "assign"
+                    },
+                    null,
+                    null,
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "end": 546,
+                                                  "start": 543,
+                                                  "tag": "SymbolIdentifier",
+                                                  "text": "cnt"
+                                                },
+                                                null
+                                              ],
+                                              "tag": "kUnqualifiedId"
+                                            }
+                                          ],
+                                          "tag": "kLocalRoot"
+                                        }
+                                      ],
+                                      "tag": "kReference"
+                                    }
+                                  ],
+                                  "tag": "kReferenceCallBase"
+                                }
+                              ],
+                              "tag": "kLPValue"
+                            },
+                            {
+                              "end": 549,
+                              "start": 548,
+                              "tag": "="
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "children": [
+                                            {
+                                              "children": [
+                                                {
+                                                  "end": 558,
+                                                  "start": 550,
+                                                  "tag": "SymbolIdentifier",
+                                                  "text": "cnt_temp"
+                                                },
+                                                null
+                                              ],
+                                              "tag": "kUnqualifiedId"
+                                            }
+                                          ],
+                                          "tag": "kLocalRoot"
+                                        }
+                                      ],
+                                      "tag": "kReference"
+                                    }
+                                  ],
+                                  "tag": "kReferenceCallBase"
+                                }
+                              ],
+                              "tag": "kExpression"
+                            }
+                          ],
+                          "tag": "kNetVariableAssignment"
+                        }
+                      ],
+                      "tag": "kAssignmentList"
+                    },
+                    {
+                      "end": 560,
+                      "start": 559,
+                      "tag": ";"
+                    }
+                  ],
+                  "tag": "kContinuousAssignmentStatement"
+                }
+              ],
+              "tag": "kModuleItemList"
+            },
+            {
+              "end": 571,
+              "start": 562,
+              "tag": "endmodule"
+            },
+            null
+          ],
+          "tag": "kModuleDeclaration"
+        }
+      ],
+      "tag": "kDescriptionList"
+    }
+  }
+}
