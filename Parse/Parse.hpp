@@ -81,6 +81,7 @@ private:
     shared_ptr<Module>                          pModule;
     vector<string>                              UnInstModuleName;
     vector<string>                              InstModuleName;
+    string                                      tempPortDec;
 };
 
 

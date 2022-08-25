@@ -4,13 +4,19 @@
 
 #include "Module.hpp"
 
+
+void Module::AddModuleNameGuid(const string& guid, const string ModuleName) {
+    ModuleNameGuid[guid] = ModuleName;
+}
+
 void Module::AddPortName(const string &PortName) {
     PortNameVec.emplace_back(PortName);
 }
 
-void Module::AddIncludeModuleName(vector<string> &UnInstModuletName, vector<string> &InstModuletName) {
-    for (auto i = 0; i < UnInstModuletName.size(); ++i) {
-        ParameterValueUnMap[UnInstModuletName[i]] = InstModuletName[i];
+void Module::AddIncludeModuleName(vector<string> &UnInstModuleName, vector<string> &InstModuleName) {
+    for (auto i = 0; i < UnInstModuleName.size(); ++i) {
+        pair<string,string> temp= {UnInstModuleName[i],InstModuleName[i]};
+        IncludeModuleName.insert(temp);
     }
 }
 
@@ -22,12 +28,23 @@ void Module::AddParameter(vector<string> &ParameterName, vector<string> &Paramet
 
 void Module::AddInstPort(string &PortInstPort) {
     auto pos = PortInstPort.find(":");
-    PortInstNameUnMap[PortInstPort.substr(0,pos)] = PortInstPort.substr(pos+1);
+    PortInstNameUnMap[PortInstPort.substr(0, pos)] = PortInstPort.substr(pos + 1);
+}
+
+void Module::AddParameterOutSideMap(string &ParameterOutSideParameter) {
+    auto pos = ParameterOutSideParameter.find(":");
+    ParameterOutSideMap[ParameterOutSideParameter.substr(0, pos)] = ParameterOutSideParameter.substr(pos + 1);
 }
 
 
 void Module::ShowInstNameUnMap() {
-    for(auto& itr:PortInstNameUnMap){
-        cout<<itr.first<<":"<<itr.second<<endl;
+    for (auto &itr: PortInstNameUnMap) {
+        cout << itr.first << ":" << itr.second << endl;
     }
 }
+
+void Module::AddPortDeclaration(string &PortDec) {
+    PortDeclaration.emplace_back(PortDec);
+}
+
+

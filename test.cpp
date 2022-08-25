@@ -62,7 +62,7 @@ int main(int argc,char* argv[]) {
                                                                                 if (moduleName->value.IsString() &&
                                                                                     moduleName->value ==
                                                                                     "SymbolIdentifier") {
-                                                                                    cout<< "module name:"<<(moduleName+1)->value.GetString()<< endl;
+                                                                                    //cout<< "module name:"<<(moduleName+1)->value.GetString()<< endl;
                                                                                     //repair
                                                                                 }
                                                                                 else if(moduleName->value.IsString() && moduleName->value == "kParenGroup"){
@@ -110,7 +110,7 @@ int main(int argc,char* argv[]) {
                                                                                                                         if(kPortReference->IsObject()){
                                                                                                                             for(auto portName = kPortReference->GetObject().MemberBegin();portName != kPortReference->GetObject().MemberEnd();++portName) {
                                                                                                                                 if(portName->value.IsString()&& portName->value == "output"||portName->value =="input"||portName->value =="inout"||portName->value =="wire"||portName->value =="reg"){
-                                                                                                                                    cout<<portName->value.GetString()<<endl;
+                                                                                                                                    //cout<<portName->value.GetString()<<endl;
                                                                                                                                 }else if(portName->value.IsArray()){
                                                                                                                                     for(auto portObject = portName->value.Begin();portObject!=portName->value.End();++portObject){
                                                                                                                                         if(portObject->IsObject()){

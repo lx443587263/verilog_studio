@@ -48,6 +48,7 @@ void Parse::ParseVerilog(string &FileName) {
     shared_ptr<Module> tempPModule(new Module);
     pModule = tempPModule;
     ModuleGuid[guid] = pModule;
+
     if (doc.HasMember(FileName.c_str())) {
         for (auto itr = doc[FileName.c_str()].MemberBegin(); itr != doc[FileName.c_str()].MemberEnd(); ++itr) {
             if (itr->name == "tree" && itr->value.IsObject()) {
@@ -73,11 +74,14 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                     if (MPDec->IsObject()) {
                                                                                         for (auto Dimensions = MPDec->GetObject().MemberBegin(); Dimensions != MPDec->GetObject().MemberEnd(); ++Dimensions) {
                                                                                             if (Dimensions->value == "input") {
-                                                                                                cout << "input" << endl;
+                                                                                                //cout << "input" << endl;
+                                                                                                tempPortDec += "input:";
                                                                                             } else if (Dimensions->value == "output") {
-                                                                                                cout << "output" << endl;
+                                                                                                //cout << "output" << endl;
+                                                                                                tempPortDec += "output:";
                                                                                             } else if (Dimensions->value == "inout") {
-                                                                                                cout << "inout" << endl;
+                                                                                                //cout << "inout" << endl;
+                                                                                                tempPortDec += "inout:";
                                                                                             } else if (Dimensions->value == "kPackedDimensions" && (Dimensions - 1)->value.IsArray()) {
                                                                                                 RepeatBitWidth(Dimensions);
                                                                                             } else if (Dimensions->value == "kIdentifierList") {
@@ -95,13 +99,17 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                                                                             if (itr5->IsObject()) {
                                                                                                                                                 for (auto itr6 = itr5->GetObject().MemberBegin(); itr6 != itr5->GetObject().MemberEnd(); ++itr6) {
                                                                                                                                                     if (itr6->value.IsString() && itr6->value == "SymbolIdentifier" && (itr6 + 1)->name == "text") {
-                                                                                                                                                        cout << (itr6 + 1)->value.GetString() << endl;
+                                                                                                                                                        //cout << (itr6 + 1)->value.GetString() << endl;
+                                                                                                                                                        tempPortDec += static_cast<string>((itr6 + 1)->value.GetString());
                                                                                                                                                     }
                                                                                                                                                 }
                                                                                                                                             }
                                                                                                                                         }
                                                                                                                                     } else if (itr4->value.IsString() && itr4->value == "SymbolIdentifier") {
-                                                                                                                                        cout << (itr4 + 1)->value.GetString() << endl;
+                                                                                                                                        //cout << (itr4 + 1)->value.GetString() << endl;
+                                                                                                                                        tempPortDec += ":" +static_cast<string>((itr4 + 1)->value.GetString());
+                                                                                                                                        pModule->AddPortDeclaration(tempPortDec);
+                                                                                                                                        tempPortDec.clear();
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                             }
@@ -122,7 +130,10 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                                                     if (kUnpackedDimensions->IsObject()) {
                                                                                                                         for (auto portName = kUnpackedDimensions->GetObject().MemberBegin(); portName != kUnpackedDimensions->GetObject().MemberEnd(); ++portName) {
                                                                                                                             if (portName->value.IsString() && portName->value == "SymbolIdentifier" && (portName + 1)->name == "text") {
-                                                                                                                                cout << (portName + 1)->value.GetString() << endl;
+                                                                                                                                //cout <<(portName + 1)->value.GetString() << endl;
+                                                                                                                                tempPortDec += static_cast<string>((portName + 1)->value.GetString());
+                                                                                                                                pModule->AddPortDeclaration(tempPortDec);
+                                                                                                                                tempPortDec.clear();
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
@@ -141,7 +152,8 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                         if (NetDec->IsObject()) {
                                                                                             for (auto itr = NetDec->GetObject().MemberBegin(); itr != NetDec->GetObject().MemberEnd(); ++itr) {
                                                                                                 if (itr->value.IsString() && itr->value == "wire") {
-                                                                                                    cout << "wire" << endl;
+                                                                                                    //cout << "wire" << endl;
+                                                                                                    tempPortDec += "wire:";
                                                                                                 } else if ((itr - 1)->value.IsArray() && itr->value == "kDataTypeImplicitIdDimensions") {
                                                                                                     for (auto itr2 = (itr - 1)->value.Begin(); itr2 != (itr - 1)->value.End(); ++itr2) {
                                                                                                         if (itr2->IsObject()) {
@@ -169,7 +181,10 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                                                         if (itr4->IsObject()) {
                                                                                                                             for (auto itr5 = itr4->GetObject().MemberBegin(); itr5 != itr4->GetObject().MemberEnd(); ++itr5) {
                                                                                                                                 if (itr5->value.IsString() && itr5->value == "SymbolIdentifier" && (itr5 + 1)->name == "text") {
-                                                                                                                                    cout << (itr5 + 1)->value.GetString() << endl;
+                                                                                                                                    //cout << (itr5 + 1)->value.GetString() << endl;
+                                                                                                                                    tempPortDec += static_cast<string>((itr5 + 1)->value.GetString());
+                                                                                                                                    pModule->AddPortDeclaration(tempPortDec);
+                                                                                                                                    tempPortDec.clear();
                                                                                                                                 }
                                                                                                                             }
                                                                                                                         }
@@ -224,7 +239,10 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                                                                         if (itr6->IsObject()) {
                                                                                                                                             for (auto itr7 = itr6->GetObject().MemberBegin(); itr7 != itr6->GetObject().MemberEnd(); ++itr7) {
                                                                                                                                                 if (itr7->value.IsString() && itr7->value == "SymbolIdentifier" && (itr7 + 1)->name == "text") {
-                                                                                                                                                    cout << (itr7 + 1)->value.GetString() << endl;
+                                                                                                                                                    //cout <<(itr7 + 1)->value.GetString() << endl;
+                                                                                                                                                    tempPortDec += static_cast<string>((itr7 + 1)->value.GetString());
+                                                                                                                                                    pModule->AddPortDeclaration(tempPortDec);
+                                                                                                                                                    tempPortDec.clear();
                                                                                                                                                 }
                                                                                                                                             }
                                                                                                                                         }
@@ -232,6 +250,7 @@ void Parse::ParseVerilog(string &FileName) {
                                                                                                                                 } else if (itr5->value.IsArray() && (itr5 + 1)->value == "kGateInstance") {
                                                                                                                                     GetInstName(itr5);
                                                                                                                                 }
+
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
@@ -328,7 +347,8 @@ string Parse::GetModuleName(GenericValue<UTF8<>>::MemberIterator &ModuleNameItr)
         if (mHeader->IsObject()) {
             for (auto moduleName = mHeader->GetObject().MemberBegin(); moduleName != mHeader->GetObject().MemberEnd(); ++moduleName) {
                 if (moduleName->value.IsString() && moduleName->value == "SymbolIdentifier" && (moduleName + 1)->name == "text") {
-                    cout << "module name:" << (moduleName + 1)->value.GetString() << endl;
+                    //cout << (moduleName + 1)->value.GetString() << endl;
+                    pModule->AddModuleNameGuid(guid, (moduleName + 1)->value.GetString());
                 } else if (moduleName->value.IsString() && moduleName->value == "kParenGroup") {
                     GetPortName(moduleName);
                 } else if ((moduleName + 1)->value.IsString() && (moduleName + 1)->value == "kFormalParameterListDeclaration" && moduleName->value.IsArray()) {
@@ -362,7 +382,11 @@ string Parse::RepeatStruct(GenericValue<UTF8<>>::MemberIterator &RepeatItr) {
                 } else if (kUnqualifiedId->value.IsString() && kUnqualifiedId->value == "SymbolIdentifier" &&
                            (kUnqualifiedId + 1)->name == "text") {
                     //port name
+                    //cout <<(kUnqualifiedId+1)->value.GetString()<<endl;
+                    tempPortDec += static_cast<string>((kUnqualifiedId+1)->value.GetString());
                     pModule->AddPortName((kUnqualifiedId + 1)->value.GetString());
+                    pModule->AddPortDeclaration(tempPortDec);
+                    tempPortDec.clear();
                 }
             }
         }
@@ -435,7 +459,8 @@ string Parse::RepeatBitWidth(GenericValue<UTF8<>>::MemberIterator &RepeatItr) {
                                                                             if (decNum->IsObject()) {
                                                                                 for (auto wideNum = decNum->GetObject().MemberBegin(); wideNum != decNum->GetObject().MemberEnd(); ++wideNum) {
                                                                                     if (wideNum->name == "text") {
-                                                                                        cout << wideNum->value.GetString() << endl;
+                                                                                        //cout <<wideNum->value.GetString() << endl;
+                                                                                        tempPortDec += static_cast<string>(wideNum->value.GetString())+":";
                                                                                     }
                                                                                 }
                                                                             }
@@ -467,7 +492,9 @@ string Parse::GetRegName(GenericValue<UTF8<>>::MemberIterator &RegNameItr) {
             for (auto itr4 = itr3->GetObject().MemberBegin(); itr4 != itr3->GetObject().MemberEnd(); ++itr4) {
                 if (itr4->value.IsString()) {
                     //reg
-                    cout << itr4->value.GetString() << endl;
+                    //cout <<itr4->value.GetString() << endl;
+                    //tempPortDec.clear();
+                    tempPortDec += static_cast<string>(itr4->value.GetString())+":";
                 }
             }
         }
@@ -485,11 +512,11 @@ string Parse::GetPortDec(GenericValue<UTF8<>>::MemberIterator &PortDecItr) {
                 if (portName->value.IsString() && portName->value == "output" || portName->value == "input" ||
                     portName->value == "inout" || portName->value == "wire" || portName->value == "reg") {
                     //port type
-                    cout << portName->value.GetString() << endl;
+                    //cout<<portName->value.GetString() << endl;
+                    tempPortDec += static_cast<string>(portName->value.GetString())+":";
                 } else if (portName->value.IsArray()) {
                     RepeatStruct(portName);
-                } else if (portName->value.IsString() && portName->value == "kDataType" &&
-                           (portName - 1)->value.IsArray()) {
+                } else if (portName->value.IsString() && portName->value == "kDataType" &&(portName - 1)->value.IsArray()) {
                     for (auto itr = (portName - 1)->value.Begin(); itr != (portName - 1)->value.End(); ++itr) {
                         if (itr->IsObject()) {
                             for (auto itr2 = itr->GetObject().MemberBegin();
@@ -521,7 +548,7 @@ string Parse::GetInstName(GenericValue<UTF8<>>::MemberIterator &InstNameItr) {
             for (auto itr7 = itr6->GetObject().MemberBegin(); itr7 != itr6->GetObject().MemberEnd(); ++itr7) {
                 if (itr7->value.IsString() && itr7->value == "SymbolIdentifier" && (itr7 + 1)->name == "text") {
                     // inst module name
-                    cout <<(itr7 + 1)->value.GetString() << endl;
+                    //cout <<(itr7 + 1)->value.GetString() << endl;
                     InstModuleName.emplace_back((itr7 + 1)->value.GetString());
                 } else if (itr7->value.IsArray() && (itr7 + 1)->value == "kParenGroup") {
                     GetInstPort(itr7);
@@ -551,7 +578,7 @@ void Parse::GetInstPort(GenericValue<UTF8<>>::MemberIterator &InstPortItr) {
                                                     ResStr = static_cast<string>(itr13->value.GetString());
                                                 } else if (itr13->value.IsString() && itr13->value == "SymbolIdentifier" && (itr13 + 1)->name == "text") {
                                                     //port name
-                                                    //cout << (itr13 + 1)->value.GetString() << endl;
+                                                    //cout <<(itr13 + 1)->value.GetString() << endl;
                                                     ResStr += static_cast<string>((itr13 + 1)->value.GetString());
                                                 } else if (itr13->value.IsArray() && (itr13 + 1)->value == "kParenGroup") {
                                                     // inst port name
@@ -598,7 +625,7 @@ void Parse::GetParameter(GenericValue<UTF8<>>::MemberIterator &ParameterItr) {
                                                                                         if (itr11->IsObject()) {
                                                                                             for (auto itr12 = itr11->GetObject().MemberBegin(); itr12 != itr11->GetObject().MemberEnd(); ++itr12) {
                                                                                                 if (itr12->value.IsString() && itr12->value == "SymbolIdentifier" && (itr12 + 1)->name == "text") {
-                                                                                                    cout << (itr12 + 1)->value.GetString()<<" ";
+                                                                                                    //cout << (itr12 + 1)->value.GetString()<<" ";
                                                                                                     tempParameterName.emplace_back((itr12 + 1)->value.GetString());
                                                                                                 }
                                                                                             }
@@ -622,7 +649,7 @@ void Parse::GetParameter(GenericValue<UTF8<>>::MemberIterator &ParameterItr) {
                                                                                                             if (decNum->IsObject()) {
                                                                                                                 for (auto wideNum = decNum->GetObject().MemberBegin(); wideNum != decNum->GetObject().MemberEnd(); ++wideNum) {
                                                                                                                     if (wideNum->name == "text") {
-                                                                                                                        cout << wideNum->value.GetString() << endl;
+                                                                                                                        //cout << wideNum->value.GetString() << endl;
                                                                                                                         tempParameterValue.emplace_back(wideNum->value.GetString());
                                                                                                                     }
                                                                                                                 }
@@ -658,13 +685,14 @@ void Parse::GetParameter(GenericValue<UTF8<>>::MemberIterator &ParameterItr) {
 
 /**********************************************/
 void Parse::GetParameterInst(GenericValue<UTF8<>>::MemberIterator &ParameterItr) {
+    string ResStr;
     for (auto itr8 = ParameterItr->value.Begin(); itr8 != ParameterItr->value.End(); ++itr8) {
         if (itr8->IsObject()) {
             for (auto itr9 = itr8->GetObject().MemberBegin(); itr9 != itr8->GetObject().MemberEnd(); ++itr9) {
                 //get inst
                 if (itr9->value.IsString() && itr9->value == "SymbolIdentifier" && (itr9 + 1)->name == "text") {
                     //module old name
-                    cout << (itr9 + 1)->value.GetString() << endl;
+                    //cout << "09090" << (itr9 + 1)->value.GetString() << endl;
                     UnInstModuleName.emplace_back((itr9 + 1)->value.GetString());
                 } else if (itr9->value.IsString() && itr9->value == "kActualParameterList" && (itr9 - 1)->value.IsArray()) {
                     for (auto itr10 = (itr9 - 1)->value.Begin(); itr10 != (itr9 - 1)->value.End(); ++itr10) {
@@ -684,15 +712,19 @@ void Parse::GetParameterInst(GenericValue<UTF8<>>::MemberIterator &ParameterItr)
                                                                             for (auto itr17 = itr16->GetObject().MemberBegin(); itr17 != itr16->GetObject().MemberEnd(); ++itr17) {
                                                                                 //get outside parameter
                                                                                 if (itr17->value.IsString() && itr17->value == ".") {
-                                                                                    cout << itr17->value.GetString();
+                                                                                    //cout << itr17->value.GetString();
+                                                                                    ResStr = static_cast<string>(itr17->value.GetString());
                                                                                 } else if (itr17->value.IsString() && itr17->value == "SymbolIdentifier" && (itr17 + 1)->name == "text") {
-                                                                                    cout << (itr17 + 1)->value.GetString() << endl;
+                                                                                    //cout  << "***" <<(itr17 + 1)->value.GetString() << endl;
+                                                                                    ResStr += static_cast<string>((itr17 + 1)->value.GetString());
                                                                                 } else if ((itr17 + 1)->value.IsString() && (itr17 + 1)->value == "kParenGroup" && itr17->value.IsArray()) {
-                                                                                    cout<< RepeatInstStruct(itr17) <<endl;
+                                                                                    //cout<< "9090" << RepeatInstStruct(itr17) <<endl;
+                                                                                    ResStr += ":"+RepeatInstStruct(itr17);
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
+                                                                    pModule->AddParameterOutSideMap(ResStr);
                                                                 }
                                                             }
                                                         }
