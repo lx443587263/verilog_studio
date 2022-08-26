@@ -5,45 +5,45 @@
 #include "Module.hpp"
 
 
-void Module::AddModuleNameGuid(const string& guid, const string ModuleName) {
+void VerilogStudio::Module::AddModuleNameGuid(const string& guid, const string ModuleName) {
     ModuleNameGuid[guid] = ModuleName;
 }
 
-void Module::AddPortName(const string &PortName) {
+void VerilogStudio::Module::AddPortName(const string &PortName) {
     PortNameVec.emplace_back(PortName);
 }
 
-void Module::AddIncludeModuleName(vector<string> &UnInstModuleName, vector<string> &InstModuleName) {
+void VerilogStudio::Module::AddIncludeModuleName(vector<string> &UnInstModuleName, vector<string> &InstModuleName) {
     for (auto i = 0; i < UnInstModuleName.size(); ++i) {
         pair<string,string> temp= {UnInstModuleName[i],InstModuleName[i]};
-        IncludeModuleName.insert(temp);
+        IncludeModuleNameUnMap.insert(temp);
     }
 }
 
-void Module::AddParameter(vector<string> &ParameterName, vector<string> &ParameterValue) {
+void VerilogStudio::Module::AddParameter(vector<string> &ParameterName, vector<string> &ParameterValue) {
     for (auto i = 0; i < ParameterName.size(); ++i) {
         ParameterValueUnMap[ParameterName[i]] = ParameterValue[i];
     }
 }
 
-void Module::AddInstPort(string &PortInstPort) {
+void VerilogStudio::Module::AddInstPort(string &PortInstPort) {
     auto pos = PortInstPort.find(":");
     PortInstNameUnMap[PortInstPort.substr(0, pos)] = PortInstPort.substr(pos + 1);
 }
 
-void Module::AddParameterOutSideMap(string &ParameterOutSideParameter) {
+void VerilogStudio::Module::AddParameterOutSideMap(string &ParameterOutSideParameter) {
     auto pos = ParameterOutSideParameter.find(":");
     ParameterOutSideMap[ParameterOutSideParameter.substr(0, pos)] = ParameterOutSideParameter.substr(pos + 1);
 }
 
 
-void Module::ShowInstNameUnMap() {
+void VerilogStudio::Module::ShowInstNameUnMap() {
     for (auto &itr: PortInstNameUnMap) {
         cout << itr.first << ":" << itr.second << endl;
     }
 }
 
-void Module::AddPortDeclaration(string &PortDec) {
+void VerilogStudio::Module::AddPortDeclaration(string &PortDec) {
     PortDeclaration.emplace_back(PortDec);
 }
 
