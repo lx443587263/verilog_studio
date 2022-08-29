@@ -13,12 +13,13 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <set>
 
 namespace VerilogStudio{
     /**********************************************/
     using namespace std;
 
-/*******************class**********************/
+    /*******************class**********************/
     class Module {
     public:
         /********************************************/
@@ -29,7 +30,7 @@ namespace VerilogStudio{
         /*********************************************
         *******************add element****************
         **********************************************/
-        void AddModuleNameGuid(const string& guid, const string ModuleName);
+        void AddModuleName(const string& guid,const string& ModuleName);
 
         void AddPortName(const string &PortName);
 
@@ -43,10 +44,15 @@ namespace VerilogStudio{
 
         void AddPortDeclaration(string& PortDec);
 
+        void AddIncludeModule();
+
         /*********************************************
         *******************get element****************
         **********************************************/
         void ShowInstNameUnMap();
+
+        set<string> GetIncludeModuleName();
+
 
 
     private:
@@ -56,8 +62,9 @@ namespace VerilogStudio{
         unordered_map<string, string>           PortInstNameUnMap;
         unordered_map<string, string>           ParameterOutSideMap;
         vector<string>                          PortDeclaration;
-        unordered_map<string, string>           ModuleNameGuid;
-
+        set<string>                             IncludeModule;
+        unordered_map<string, vector<string>>   ModuleNameGuid;
+        vector<string>                          ModuleNameVec;
     };
 }
 

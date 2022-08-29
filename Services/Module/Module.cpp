@@ -5,9 +5,6 @@
 #include "Module.hpp"
 
 
-void VerilogStudio::Module::AddModuleNameGuid(const string& guid, const string ModuleName) {
-    ModuleNameGuid[guid] = ModuleName;
-}
 
 void VerilogStudio::Module::AddPortName(const string &PortName) {
     PortNameVec.emplace_back(PortName);
@@ -46,5 +43,22 @@ void VerilogStudio::Module::ShowInstNameUnMap() {
 void VerilogStudio::Module::AddPortDeclaration(string &PortDec) {
     PortDeclaration.emplace_back(PortDec);
 }
+
+void VerilogStudio::Module::AddIncludeModule() {
+    for(auto &it: IncludeModuleNameUnMap){
+        IncludeModule.emplace(it.first);
+    }
+}
+
+std::set<std::string> VerilogStudio::Module::GetIncludeModuleName() {
+    return IncludeModule;
+}
+
+void VerilogStudio::Module::AddModuleName(const string& guid,const string& ModuleName) {
+    ModuleNameVec.emplace_back(ModuleName);
+    ModuleNameGuid[guid] = ModuleNameVec;
+}
+
+
 
 

@@ -12,6 +12,7 @@
 #include <cassert>
 #include <queue>
 #include <unordered_map>
+#include <set>
 
 
 using namespace std;
@@ -23,14 +24,14 @@ namespace VerilogStudio {
 
         htree_node() : parent(nullptr), format("  ") {}
 
-        htree_node(const T &x, vector<T> info) : layer(x), parent(nullptr), format("  ") {
-            domaininfors.emplace(layer, info);
+        htree_node(const T &x, vector<T> Modules) : parent(nullptr), format("  ") {
+            IncludeModules = Modules;
         }
 
         ~htree_node() {}
 
-        T layer, ModuleName;
-        unordered_map<T, vector<T>> domaininfors;
+        T ModuleName;
+        set<T> IncludeModules;
         /*默认为两个空格*/
         std::string format;
         node_type *parent;
@@ -80,11 +81,11 @@ namespace VerilogStudio {
             ~iterator() {}
 
             T &operator*() const {
-                return _node->layer;
+                return _node->ModuleName;
             }
 
             T *operator->() const {
-                return &(_node->layer);
+                return &(_node->ModuleName);
             }
 
             tree_node *get() {
@@ -167,11 +168,9 @@ namespace VerilogStudio {
                 int size = qu.size();
                 for (int i = 0; i < size; i++) {
                     tree_node *node = qu.front();
-                    temp.push_back(node->layer);
-                    for (auto &it: node->domaininfors) {
-                        for (auto &it2: it) {
+                    temp.push_back(node->ModuleName);
+                    for (auto &it: node->IncludeModules) {
                             temp.push_back(it);
-                        }
                     }
                     /*遍历队头的孩子节点，如果不为空，加入队列*/
                     for (auto node: qu.front()->children) {
@@ -194,7 +193,7 @@ namespace VerilogStudio {
             form_stack.push(temp);
 
             cout << temp;
-            cout << some->layer;
+            cout << some->ModuleName;
             cout << endl;
             for (unsigned i = 0; i < some->children.size(); i++)
                 recurs_render(some->children[i]);

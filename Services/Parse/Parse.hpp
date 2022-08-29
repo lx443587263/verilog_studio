@@ -16,6 +16,7 @@
 #include <sstream>
 #include <random>
 #include <memory>
+#include <algorithm>
 #include "../Module/Module.hpp"
 #include "../../rapidjson/document.h"
 #include "../../rapidjson/filereadstream.h"
@@ -28,6 +29,19 @@ namespace VerilogStudio{
     using namespace std;
     using namespace rapidjson;
 
+
+/*******************class**********************/
+    class finder
+    {
+    public:
+        finder(const std::string &cmp_string) :s_(cmp_string){}
+        bool operator ()(const unordered_map<string, string>::value_type &item)
+        {
+            return item.second == s_;
+        }
+    private:
+        const std::string &s_;
+    };
 
 /*******************class**********************/
     class Parse: public IService{
@@ -73,6 +87,13 @@ namespace VerilogStudio{
 
         string generate_hex(const unsigned int len);
 
+        /*********************************************
+        ****************parse verilog*****************
+        **********************************************/
+        set<string> GetModuleNameGuid(string& ModuleName);
+
+        set<string> GetIncludeModuleSet(const string& guid);
+
         /********************************************/
     private:
         Document                                    doc;
@@ -83,6 +104,9 @@ namespace VerilogStudio{
         vector<string>                              UnInstModuleName;
         vector<string>                              InstModuleName;
         string                                      tempPortDec;
+        vector<string>                              ModuleNames;
+        unordered_map<string, vector<string>>       KVFileModule;
+        unordered_map<string, string>               KVModuleGuid;
     };
 
 }
