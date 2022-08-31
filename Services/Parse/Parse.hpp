@@ -51,6 +51,7 @@ namespace VerilogStudio{
 
         ~Parse() {}
 
+
         /*********************************************
         ****************parse verilog*****************
         **********************************************/
@@ -93,6 +94,8 @@ namespace VerilogStudio{
         set<string> GetModuleNameGuid(string& ModuleName);
 
         set<string> GetIncludeModuleSet(const string& guid);
+
+        string GetFileName(string& ModuleName);
 
         /********************************************/
     private:

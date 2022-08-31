@@ -13,6 +13,7 @@
 #include <queue>
 #include <unordered_map>
 #include <set>
+#include <map>
 
 
 using namespace std;
@@ -156,12 +157,13 @@ namespace VerilogStudio {
         }
 
         /*层次遍历*/
-        vector<vector<string>> levelOrder(tree_node *root) {
+        map<int,vector<string>> levelOrder(tree_node *root) {
             /*特判*/
             if (root == nullptr) return {};
-            vector<vector<string>> res;
+            map<int,vector<string>> res;
             queue<tree_node *> qu;
             qu.push(root);
+            int l = 1;
             while (!qu.empty()) {
                 vector<string> temp;
                 /*每一层的个数*/
@@ -169,9 +171,9 @@ namespace VerilogStudio {
                 for (int i = 0; i < size; i++) {
                     tree_node *node = qu.front();
                     temp.push_back(node->ModuleName);
-                    for (auto &it: node->IncludeModules) {
-                            temp.push_back(it);
-                    }
+//                    for (auto &it: node->IncludeModules) {
+//                            res.push_back(it);
+//                    }
                     /*遍历队头的孩子节点，如果不为空，加入队列*/
                     for (auto node: qu.front()->children) {
                         if (node) {
@@ -180,7 +182,8 @@ namespace VerilogStudio {
                     }
                     qu.pop();
                 }
-                res.push_back(temp);
+                res[l]=temp;
+                ++l;
             }
             return res;
         }

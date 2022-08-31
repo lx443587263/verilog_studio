@@ -774,6 +774,34 @@ std::set<std::string> VerilogStudio::Parse::GetIncludeModuleSet(const std::strin
     return temp;
 }
 
+std::string VerilogStudio::Parse::GetFileName(std::string &ModuleName) {
+    int i;
+    string temp;
+    string filename;
+
+    for(auto &it:KVFileModule){
+        auto ss = find_if(it.second.begin(),it.second.end(),[ModuleName](string& modulename){
+            return modulename == ModuleName;
+        });
+        if(ss!=it.second.end()){
+            temp = it.first;
+        }
+
+//        for(i = 0;i<it.second.size();++i){
+//            if(it.second[i] == ModuleName){
+//                temp = it.first;
+//            }
+//        }
+    }
+
+    auto search = FileNameGuid.find(temp);
+    if(search != FileNameGuid.end()){
+        filename = search->second;
+    }
+
+    return filename;
+}
+
 
 
 
