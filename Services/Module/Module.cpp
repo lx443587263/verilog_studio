@@ -17,6 +17,13 @@ void VerilogStudio::Module::AddIncludeModuleName(vector<string> &UnInstModuleNam
     }
 }
 
+void VerilogStudio::Module::AddIncludeModuleNameMap(vector<string> &InstModuleName, vector<string> &UnInstModuleName) {
+    for (auto i = 0; i < InstModuleName.size(); ++i) {
+        pair<string,string> temp= {InstModuleName[i],UnInstModuleName[i]};
+        IncludeModuleNameMap.insert(temp);
+    }
+}
+
 void VerilogStudio::Module::AddParameter(vector<string> &ParameterName, vector<string> &ParameterValue) {
     for (auto i = 0; i < ParameterName.size(); ++i) {
         ParameterValueUnMap[ParameterName[i]] = ParameterValue[i];
@@ -59,6 +66,13 @@ void VerilogStudio::Module::AddModuleName(const string& guid,const string& Modul
     ModuleNameGuid[guid] = ModuleNameVec;
 }
 
+std::unordered_multimap<std::string, std::string> VerilogStudio::Module::GetIncludeModuleNameUnMap() {
+    return IncludeModuleNameUnMap;
+}
+
+std::unordered_map<std::string, std::string> VerilogStudio::Module::GetIncludeModuleNameMap() {
+    return IncludeModuleNameMap;
+}
 
 
 

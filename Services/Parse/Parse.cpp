@@ -247,6 +247,7 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                                                                     GetInstName(itr5);
                                                                                                                                 }
                                                                                                                                 pModule->AddIncludeModuleName(UnInstModuleName,InstModuleName);
+                                                                                                                                pModule->AddIncludeModuleNameMap(InstModuleName,UnInstModuleName);
                                                                                                                                 pModule->AddIncludeModule();
                                                                                                                                 UnInstModuleName.clear();
                                                                                                                                 InstModuleName.clear();
@@ -282,6 +283,7 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
         }
     }
     KVFileModule[FileGuid] = ModuleNames;
+    ModuleNames.clear();
 }
 
 /**********************************************/
@@ -741,11 +743,11 @@ void VerilogStudio::Parse::GetParameterInst(Value::MemberIterator &ParameterItr)
     }
 }
 
-std::set<std::string> VerilogStudio::Parse::GetModuleNameGuid(std::string &ModuleName) {
-    set<string> temp;
+std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetModuleNameGuid(std::string &ModuleName) {
+    unordered_map<string,string> temp;
     auto it = find_if(KVModuleGuid.begin(), KVModuleGuid.end(), finder(ModuleName));
     if(it!=KVModuleGuid.end()){
-        temp = GetIncludeModuleSet((*it).first);
+        temp = GetIncludeModuleMap((*it).first);
     }
 
 //    for(auto& it:KVModuleGuid){
@@ -757,12 +759,12 @@ std::set<std::string> VerilogStudio::Parse::GetModuleNameGuid(std::string &Modul
     return temp;
 }
 
-std::set<std::string> VerilogStudio::Parse::GetIncludeModuleSet(const std::string &guid) {
-    set<string> temp;
+std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetIncludeModuleMap(const std::string &guid) {
+    unordered_map<string, string> temp;
 
     auto search = ModuleGuid.find(guid);
     if(search!=ModuleGuid.end()){
-        temp = search->second->GetIncludeModuleName();
+        temp = search->second->GetIncludeModuleNameMap();
     }
 
 //    for(auto &it:ModuleGuid){
@@ -801,6 +803,7 @@ std::string VerilogStudio::Parse::GetFileName(std::string &ModuleName) {
 
     return filename;
 }
+
 
 
 

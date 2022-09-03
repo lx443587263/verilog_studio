@@ -25,14 +25,17 @@ namespace VerilogStudio {
 
         htree_node() : parent(nullptr), format("  ") {}
 
-        htree_node(const T &x, vector<T> Modules) : parent(nullptr), format("  ") {
-            IncludeModules = Modules;
-        }
+//        htree_node(const T &x, unordered_map<T,T> Modules) : parent(nullptr), format("  ") {
+//            KVInstModule = Modules;
+//        }
 
         ~htree_node() {}
 
         T ModuleName;
-        set<T> IncludeModules;
+        //set<T> IncludeModules;
+        //
+        unordered_map<T,T> KVInstModule;
+        unordered_map<T,T> KVIncludeInstModule;
         /*默认为两个空格*/
         std::string format;
         node_type *parent;
@@ -88,6 +91,10 @@ namespace VerilogStudio {
             T *operator->() const {
                 return &(_node->ModuleName);
             }
+
+//            vector<T> &operator->() const{
+//                return _node->children;
+//            }
 
             tree_node *get() {
                 return _node;
@@ -171,9 +178,11 @@ namespace VerilogStudio {
                 for (int i = 0; i < size; i++) {
                     tree_node *node = qu.front();
                     temp.push_back(node->ModuleName);
-//                    for (auto &it: node->IncludeModules) {
-//                            res.push_back(it);
-//                    }
+                    if(!node->KVInstModule.empty()){
+                        for (auto &it: node->KVInstModule) {
+                            temp.push_back(it.first+":"+it.second);
+                        }
+                    }
                     /*遍历队头的孩子节点，如果不为空，加入队列*/
                     for (auto node: qu.front()->children) {
                         if (node) {

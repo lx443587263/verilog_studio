@@ -8,24 +8,50 @@
 VerilogStudio::htree<string>
 VerilogStudio::Hierarchy::CreateTree(string &TopName, shared_ptr<Parse> &pPar) {
     pParse = pPar;
-    set<string> tempSet = pParse->GetModuleNameGuid(TopName);
-    node_type *root = make_node(TopName, tempSet);
+    unordered_map<string, string> tempMap = pParse->GetModuleNameGuid(TopName);
+    node_type *root = make_root(TopName, tempMap);
     tree_type::iterator iter(root);
     tree_type tr(root);
 
-    for (auto it = tempSet.begin(); it != tempSet.end(); ++it) {
-        iter = tr.insert(iter, make_node(*it, pParse->GetIncludeModuleSet(*it)));
+    for (auto it = tempMap.begin(); it != tempMap.end(); ++it) {
+        unordered_map<string,string> tempUnMap;
+        tempUnMap[it->first] = it->second;
+        tr.insert(iter, make_node(it->first,tempUnMap, pParse->GetModuleNameGuid((*it).second)));
     }
 
     return tr;
 }
 
+//void VerilogStudio::Hierarchy::recursive(tree_type::iterator& iter, htree_node<string>& node) {
+//    if(node.KVIncludeInstModule.empty()){
+//        return;
+//    }
+//    tree_type::iterator tempiter;
+//    node_type* tempnode;
+//    for (auto& it : node.KVIncludeInstModule) {
+//        tempnode = make_node(it.first, pParse->GetModuleNameGuid(it.second));
+//        tempiter  = tr.insert(iter, tempnode);
+//    }
+//    recursive(tempiter,*tempnode);
+//}
+
 VerilogStudio::htree_node<string> *
-VerilogStudio::Hierarchy::make_node(const string &ModuleName, const set<string> &ModuleNameSet) {
+VerilogStudio::Hierarchy::make_node(const string &ModuleName,const unordered_map<string,string>& KVModuleNameMap,const unordered_map<string, string>& IncludeModuleNameUnMap) {
     node_type *node = new node_type;
+    node->KVInstModule = KVModuleNameMap;
+    node->KVIncludeInstModule = IncludeModuleNameUnMap;
     node->ModuleName = ModuleName;
-    node->IncludeModules = ModuleNameSet;
+    for(auto it:IncludeModuleNameUnMap){
+        node->children.emplace_back(make_node(it.first,IncludeModuleNameUnMap,pParse->GetModuleNameGuid(it.second)));
+    }
     return node;
+}
+
+VerilogStudio::htree_node<string> *VerilogStudio::Hierarchy::make_root(const string &ModuleName, const unordered_map<string, string> &IncludeModuleNameUnMap) {
+    node_type *root = new node_type;
+    root->ModuleName = ModuleName;
+    root->KVIncludeInstModule = IncludeModuleNameUnMap;
+    return root;
 }
 
 
@@ -104,5 +130,9 @@ void VerilogStudio::Hierarchy::GetShortestPath(VerilogStudio::htree_node<string>
         cout<<it<<endl;
     }
 }
+
+
+
+
 
 

@@ -32,7 +32,9 @@ namespace VerilogStudio {
         /*********************************************
         *******************create tree****************
         **********************************************/
-        htree_node<string> *make_node(const string &ModuleName, const set<string>& ModuleNameSet);
+        htree_node<string> *make_node(const string &ModuleName, const unordered_map<string,string>& KVModuleNameMap ,const unordered_map<string, string>& IncludeModuleNameUnMap);
+
+        htree_node<string> *make_root(const string &ModuleName, const unordered_map<string, string>& IncludeModuleNameUnMap);
 
         htree<string> CreateTree(string &TopName, shared_ptr<Parse>& pPar);
 
@@ -41,6 +43,8 @@ namespace VerilogStudio {
         vector<string> DeepFirstSearch(htree_node<string>& Root, string& ModuleName, vector<string>& Path);
 
         void GetShortestPath(htree_node<string>& Root, string& start, string& end);
+
+        void recursive(htree<string>::iterator& iter,htree_node<string>& tr);
 
         /*********************************************
         *******************create tree****************

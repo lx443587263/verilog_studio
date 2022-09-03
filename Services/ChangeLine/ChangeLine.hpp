@@ -8,13 +8,20 @@
 /************************************************
  *******************header***********************
  ************************************************/
+#include "../../IService.hpp"
+namespace VerilogStudio {
+    /**********************************************/
+    using namespace std;
 
-class ChangeLine {
-public:
-    ChangeLine(){}
-    ~ChangeLine(){}
-private:
-};
+    /*******************class**********************/
+    class ChangeLine : public IService {
+    public:
+        ChangeLine(){}
+        ~ChangeLine(){}
+    private:
+    };
+}
+
 
 
 #endif //VERILOG_STUDIO_CHANGELINE_HPP

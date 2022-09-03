@@ -91,11 +91,12 @@ namespace VerilogStudio{
         /*********************************************
         ****************parse verilog*****************
         **********************************************/
-        set<string> GetModuleNameGuid(string& ModuleName);
+        unordered_map<string, string> GetModuleNameGuid(string& ModuleName);
 
-        set<string> GetIncludeModuleSet(const string& guid);
+        unordered_map<string, string> GetIncludeModuleMap(const string& guid);
 
         string GetFileName(string& ModuleName);
+
 
         /********************************************/
     private:

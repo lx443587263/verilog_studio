@@ -36,6 +36,8 @@ namespace VerilogStudio{
 
         void AddIncludeModuleName(vector<string> &UnInstModuleName, vector<string> &InstModuleName);
 
+        void AddIncludeModuleNameMap(vector<string> &InstModuleName, vector<string> &UnInstModuleName);
+
         void AddParameter(vector<string> &ParameterName, vector<string> &ParameterValue);
 
         void AddInstPort(string& PortInstPort);
@@ -53,11 +55,15 @@ namespace VerilogStudio{
 
         set<string> GetIncludeModuleName();
 
+        unordered_multimap<string, string> GetIncludeModuleNameUnMap();
+
+        unordered_map<string, string> GetIncludeModuleNameMap();
 
 
     private:
         vector<string>                          PortNameVec;
         unordered_multimap<string, string>      IncludeModuleNameUnMap;
+        unordered_map<string,string>            IncludeModuleNameMap;
         unordered_map<string, string>           ParameterValueUnMap;
         unordered_map<string, string>           PortInstNameUnMap;
         unordered_map<string, string>           ParameterOutSideMap;
