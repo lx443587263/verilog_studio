@@ -29,7 +29,7 @@ namespace VerilogStudio {
         /*********************************************
         *****************draw tree********************
         **********************************************/
-        string get_node_name(string &root_str, string &leaf_str);
+        string get_node_name(string& root_str, string& leaf_str);
 
         Agnode_t *__draw_rb_node(Agraph_t *g, Agnode_t *_parent, char *name, char *label);
 

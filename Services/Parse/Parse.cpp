@@ -16,8 +16,10 @@ void VerilogStudio::Parse::ReadJson(string &JsonFile) {
     string json_content((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
     in.close();
 
-    doc.Parse(json_content.c_str());
-
+    ParseResult result = doc.Parse(json_content.c_str());
+    if(!result){
+        cerr << "JSON parse error: %s (%u)", GetParseErrorFunc(result.Code()), result.Offset();
+    }
 }
 
 /**********************************************/

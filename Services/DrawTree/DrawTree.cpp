@@ -4,6 +4,8 @@
 
 #include "DrawTree.hpp"
 
+
+
 string VerilogStudio::DrawTree::get_node_name(string& root_str,string &leaf_str) {
     if(leaf_str.empty()){
         __node_name = root_str;
@@ -38,13 +40,19 @@ void VerilogStudio::DrawTree::__draw_rb(Agraph_t *g, Agnode_t *_parent, VerilogS
     if(_node != nullptr){
         // 当前结点不是叶结点
         string temp = "";
-        if(_node->KVInstModule.empty()) {
-            _parent = __draw_rb_node(g, _parent, get_node_name(_node->ModuleName, temp).data(), nullptr);
+        if(_node->children.empty()) {
+            _parent = __draw_rb_node(g, _parent, (char*)get_node_name(_node->ModuleName, temp).data(), nullptr);
         }else{
-            for(auto& it:_node->KVInstModule){
-                auto tempStr = it.first+":"+it.second;
-                _parent = __draw_rb_node(g, _parent, get_node_name(tempStr, temp).data(), nullptr);
+            if(_node->KVInstModule.empty()){
+                _parent = __draw_rb_node(g, _parent, (char*)get_node_name(_node->ModuleName, temp).data(), nullptr);
             }
+            else{
+                for(auto& it:_node->KVInstModule){
+                    auto tempStr = it.first+":"+it.second;
+                    _parent = __draw_rb_node(g, _parent, (char*)get_node_name(tempStr, temp).data(), nullptr);
+                }
+            }
+
         }
 
 
@@ -81,3 +89,4 @@ void VerilogStudio::DrawTree::draw_rb(VerilogStudio::htree_node<string> *root,st
     agclose(g);
     gvFreeContext(gvc);
 }
+
