@@ -35,10 +35,15 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         if(JsonPath.empty()){
             cerr<<"JsonPath is empty"<<endl;
         }
+
+        ThreadPool pool(4);
         pParse->ReadJson(JsonPath);
-        for(auto& itr:FileNameVec){
-            pParse->ParseVerilog(itr);
-        }
+
+        pool.enqueue([&](){
+            for(auto& itr:FileNameVec){
+                pParse->ParseVerilog(itr);
+            }
+        });
     }
 
     if(cmdparse->exist("hierarchy")) {

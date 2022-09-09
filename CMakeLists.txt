@@ -51,6 +51,6 @@ endif()
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
     target_link_libraries(verilog_studio cdt gvc cgraph)
 elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    target_link_libraries(verilog_studio ${LINK_DIR}/libcdt.so.5.0.0 ${LINK_DIR}/libgvc.so.6.0.0 ${LINK_DIR}/libcgraph.so.6.0.0)
+    target_link_libraries(verilog_studio ${LINK_DIR}/libcdt.so.5.0.0 ${LINK_DIR}/libgvc.so.6.0.0 ${LINK_DIR}/libcgraph.so.6.0.0 pthread)
 endif()
 
