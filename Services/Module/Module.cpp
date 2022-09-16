@@ -74,6 +74,14 @@ std::unordered_map<std::string, std::string> VerilogStudio::Module::GetIncludeMo
     return IncludeModuleNameMap;
 }
 
+void VerilogStudio::Module::AddPortEnd(std::string portEnd) {
+    PortEnd = portEnd;
+}
+
+std::string VerilogStudio::Module::GetPortEnd() {
+    return PortEnd;
+}
+
 
 
 

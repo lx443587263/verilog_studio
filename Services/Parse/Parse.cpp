@@ -18,7 +18,7 @@ void VerilogStudio::Parse::ReadJson(string &JsonFile) {
 
     ParseResult result = doc.Parse(json_content.c_str());
     if(!result){
-        cerr << "JSON parse error: %s (%u)", GetParseErrorFunc(result.Code()), result.Offset();
+        cerr << "JSON parse error:" << GetParseErrorFunc(result.Code()), result.Offset();
     }
 }
 
@@ -140,6 +140,8 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                                         }
                                                                                                     }
                                                                                                 }
+                                                                                            } else if(Dimensions->value == ";"){
+                                                                                                pModule->AddPortEnd(Dimensions->value.GetString());
                                                                                             }
                                                                                         }
                                                                                     }
@@ -285,6 +287,8 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
         }
     }
     KVFileModule[FileGuid] = ModuleNames;
+    GetKVFileInstModule(FileGuid);
+    GetKVInstModule();
     ModuleNames.clear();
 }
 
@@ -432,6 +436,8 @@ void VerilogStudio::Parse::GetPortName(Value::MemberIterator &PortNameItr) {
                                            (kPort - 1)->value.IsArray()) {
                                     //get port dec
                                     GetPortDec(kPort);
+                                }else if(kPort->value == ","){
+                                    pModule->AddPortEnd(kPort->value.GetString());
                                 }
                             }
                         }
@@ -515,8 +521,13 @@ void VerilogStudio::Parse::GetPortDec(Value::MemberIterator &PortDecItr) {
                  portName != kPortReference->GetObject().MemberEnd(); ++portName) {
                 if (portName->value.IsString() && portName->value == "output" || portName->value == "input" ||
                     portName->value == "inout" || portName->value == "wire" || portName->value == "reg") {
+                    if(portName->value == "output" || portName->value == "input" ||
+                       portName->value == "inout" && (portName-1)->name=="start"){
+                        //cout<<(portName-1)->value.GetInt() << endl;
+                        //cout<<(portName)->value.GetString() << endl;
+                    }
                     //port type
-                    //cout<<portName->value.GetString() << endl;
+                    //cout<<(portName-1)->value.GetInt() << endl;
                     tempPortDec += static_cast<string>(portName->value.GetString())+":";
                 } else if (portName->value.IsArray()) {
                     RepeatStruct(portName);
@@ -778,12 +789,11 @@ std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetIncludeMod
     return temp;
 }
 
-std::string VerilogStudio::Parse::GetFileName(std::string &ModuleName) {
-    int i;
+std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleName) {
     string temp;
     string filename;
 
-    for(auto &it:KVFileModule){
+    for(auto &it:KVFileInstModule){
         auto ss = find_if(it.second.begin(),it.second.end(),[ModuleName](string& modulename){
             return modulename == ModuleName;
         });
@@ -805,6 +815,62 @@ std::string VerilogStudio::Parse::GetFileName(std::string &ModuleName) {
 
     return filename;
 }
+
+void VerilogStudio::Parse::GetKVFileInstModule(string& fileGuid) {
+    auto tempUnMap = pModule->GetIncludeModuleNameMap();
+    vector<string> tempVec;
+    for(auto &it:tempUnMap){
+        tempVec.emplace_back(it.first);
+    }
+    KVFileInstModule[fileGuid] = tempVec;
+}
+
+std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
+    string filename;
+    string temp = KVInstModule[ModuleName];
+
+    for(auto &it:KVFileModule){
+        auto ss = find_if(it.second.begin(),it.second.end(),[temp](string& modulename){
+            return modulename == temp;
+        });
+        if(ss!=it.second.end()){
+            temp = it.first;
+        }
+    }
+
+    auto search = FileNameGuid.find(temp);
+    if(search != FileNameGuid.end()){
+        filename = search->second;
+    }
+
+    return filename;
+
+}
+
+void VerilogStudio::Parse::GetKVInstModule() {
+    if(!pModule->GetIncludeModuleNameMap().empty()){
+        for(auto &it:pModule->GetIncludeModuleNameMap()){
+            KVInstModule[it.first] = it.second;
+        }
+    }
+}
+
+std::string VerilogStudio::Parse::GetPortEnd(std::string &ModuleName) {
+    string temp = KVInstModule[ModuleName];
+    for(auto &it:KVModuleGuid){
+        if(it.second == temp){
+            temp = it.first;
+            break;
+        }
+    }
+    return ModuleGuid[temp]->GetPortEnd();
+}
+
+std::string VerilogStudio::Parse::GetSourceModuleName(std::string &InstModuleName) {
+    return KVInstModule[InstModuleName];
+}
+
+
 
 
 

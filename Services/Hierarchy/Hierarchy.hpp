@@ -44,7 +44,9 @@ namespace VerilogStudio {
 
         void GetShortestPath(htree_node<string>& Root, string& start, string& end);
 
-        void recursive(htree<string>::iterator& iter,htree_node<string>& tr);
+        vector<string> MergePath(vector<string> path1,vector<string> path2);
+
+        string GetFlipModule();
 
         /*********************************************
         *******************create tree****************
@@ -53,8 +55,8 @@ namespace VerilogStudio {
         vector<T> slice(std::vector<T> const &v, int m, int n);
 
 
-//        template<typename T,typename U>
-//        vector<T> slice(U m, U n);
+        template<typename T,typename U>
+        vector<T> sliceVec(U m, U n);
 
     /********************************************/
     private:
@@ -64,6 +66,7 @@ namespace VerilogStudio {
         vector<string>                  tempPath1;
         vector<string>                  tempPath2;
         vector<string>                  resPath;
+        string                          FlipModule;
         bool flag               =       true;
     };
 
@@ -76,12 +79,12 @@ namespace VerilogStudio {
         return vec;
     }
 
-//    template<typename T,typename U>
-//    vector<T> Hierarchy::slice(U m, U n)
-//    {
-//        vector<T> vec(m, n);
-//        return vec;
-//    }
+    template<typename T,typename U>
+    vector<T> Hierarchy::sliceVec(U m, U n)
+    {
+        vector<T> vec(m, n);
+        return vec;
+    }
 
 }
 

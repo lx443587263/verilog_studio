@@ -48,6 +48,8 @@ namespace VerilogStudio{
 
         void AddIncludeModule();
 
+        void AddPortEnd(string portEnd);
+
         /*********************************************
         *******************get element****************
         **********************************************/
@@ -58,6 +60,8 @@ namespace VerilogStudio{
         unordered_multimap<string, string> GetIncludeModuleNameUnMap();
 
         unordered_map<string, string> GetIncludeModuleNameMap();
+
+        string GetPortEnd();
 
 
     private:
@@ -71,6 +75,7 @@ namespace VerilogStudio{
         set<string>                             IncludeModule;
         unordered_map<string, vector<string>>   ModuleNameGuid;
         vector<string>                          ModuleNameVec;
+        string                                  PortEnd;
     };
 }
 

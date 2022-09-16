@@ -81,6 +81,10 @@ namespace VerilogStudio{
 
         void GetParameterInst(Value::MemberIterator &ParameterItr);
 
+        void GetKVFileInstModule(string& fileGuid);
+
+        void GetKVInstModule();
+
         /*********************************************
         ****************create guid*******************
         **********************************************/
@@ -95,7 +99,13 @@ namespace VerilogStudio{
 
         unordered_map<string, string> GetIncludeModuleMap(const string& guid);
 
-        string GetFileName(string& ModuleName);
+        string GetInstLocationFileName(string& ModuleName);
+
+        string GetSourceFileName(string& ModuleName);
+
+        string GetPortEnd(string& ModuleName);
+
+        string GetSourceModuleName(string& InstModuleName);
 
 
         /********************************************/
@@ -110,7 +120,9 @@ namespace VerilogStudio{
         string                                      tempPortDec;
         vector<string>                              ModuleNames;
         unordered_map<string, vector<string>>       KVFileModule;
+        unordered_map<string, vector<string>>       KVFileInstModule;
         unordered_map<string, string>               KVModuleGuid;
+        unordered_map<string, string>               KVInstModule;
     };
 
 }

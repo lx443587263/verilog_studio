@@ -69,7 +69,7 @@ void VerilogStudio::Hierarchy::ShowTree(VerilogStudio::htree<string> &tr) {
 
 
 vector<string> VerilogStudio::Hierarchy::DeepFirstSearch(VerilogStudio::htree_node<string> &Root, string &ModuleName, vector<string> &Path) {
-    Path.emplace_back(Root.ModuleName);
+     Path.emplace_back(Root.ModuleName);
     if (Root.ModuleName == ModuleName) {
         flag = true;
         return Path;
@@ -125,10 +125,31 @@ void VerilogStudio::Hierarchy::GetShortestPath(VerilogStudio::htree_node<string>
 
     resPath.insert(resPath.end(),path1.begin(),path1.end());
     resPath.insert(resPath.end(),path2.begin(),path2.end());
-
     for(auto it : resPath){
         cout<<it<<endl;
     }
+}
+
+vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<string> path2) {
+    for(auto i = path1.rbegin();i!=path1.rend();++i){
+        for(auto j = path2.begin();j!=path2.end();++j){
+             if((*i)==(*j)){
+                path2 = sliceVec<string>(j,path2.end());
+                tempPath1 = sliceVec<string>(path1.rbegin(),i);
+                reverse(tempPath1.end(),tempPath1.begin());
+                break;
+            }
+        }
+    }
+    FlipModule = path2.at(1);
+    resPath.insert(resPath.end(),tempPath1.begin(),tempPath1.end());
+    resPath.insert(resPath.end(),path2.begin(),path2.end());
+
+    return resPath;
+}
+
+string VerilogStudio::Hierarchy::GetFlipModule() {
+    return FlipModule;
 }
 
 

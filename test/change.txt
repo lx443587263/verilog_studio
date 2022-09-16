@@ -1,0 +1,2 @@
+counter10.u_addr01.test_101.input[0:7]test=>counter10.u_full_adder1
+

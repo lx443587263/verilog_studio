@@ -10,13 +10,16 @@
  ************************************************/
 #include <fstream>
 #include <vector>
+#include <string>
 #include <stdlib.h>
+#include <iostream>
 #include "../../IService.hpp"
 #include "../../Common/Supporting/cmdline.hpp"
 #include "../Parse/Parse.hpp"
 #include "../Hierarchy/Hierarchy.hpp"
 #include "../DrawTree/DrawTree.hpp"
 #include "../../Common/Supporting/ThreadPool.hpp"
+#include "../ChangeLine/ChangeLine.hpp"
 
 /*************************************************************/
 namespace VerilogStudio {
@@ -38,6 +41,10 @@ namespace VerilogStudio {
 
         string GetJsonPath();
 
+        vector<string> split(const string& str,const string& delims);
+
+        string& Trim(string& str);
+
     private:
         vector<string>              FileNameVec;
         string                      AllFileName;
@@ -45,6 +52,8 @@ namespace VerilogStudio {
         shared_ptr<Parse>           pParse;
         shared_ptr<Hierarchy>       pHierarchy;
         shared_ptr<DrawTree>        pDraw;
+        shared_ptr<ChangeLine>      pChangeLine;
+        vector<string>              ChangeLineContent;
     };
 }
 

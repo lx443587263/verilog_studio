@@ -15,3 +15,5 @@ module adder(clk, rst_n, a, b, c);
 			c <= a+b;
 	end
 endmodule
+
+///home/liuxi/verible/verible-v0.0-2277-g8ab3c7e3/bin/test06.v
