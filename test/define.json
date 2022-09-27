@@ -1,0 +1,207 @@
+{
+  "testdefine.v": {
+    "tree": {
+      "children": [
+        {
+          "children": [
+            {
+              "end": 24,
+              "start": 17,
+              "tag": "`define"
+            },
+            {
+              "end": 37,
+              "start": 25,
+              "tag": "PP_Identifier",
+              "text": "SMIC40LL_ARM"
+            },
+            {
+              "end": 37,
+              "start": 37,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 45,
+              "start": 38,
+              "tag": "`define"
+            },
+            {
+              "end": 54,
+              "start": 46,
+              "tag": "PP_Identifier",
+              "text": "SMIC40LL"
+            },
+            {
+              "end": 54,
+              "start": 54,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 71,
+              "start": 64,
+              "tag": "`define"
+            },
+            {
+              "end": 85,
+              "start": 72,
+              "tag": "PP_Identifier",
+              "text": "GPIO_PB_EXIST"
+            },
+            {
+              "end": 85,
+              "start": 85,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 94,
+              "start": 87,
+              "tag": "`define"
+            },
+            {
+              "end": 107,
+              "start": 95,
+              "tag": "PP_Identifier",
+              "text": "SPINLOCK_NUM"
+            },
+            {
+              "end": 117,
+              "start": 115,
+              "tag": "PP_define_body",
+              "text": "16"
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 166,
+              "start": 159,
+              "tag": "`define"
+            },
+            {
+              "end": 181,
+              "start": 167,
+              "tag": "PP_Identifier",
+              "text": "AHB0_SLAVE_NUM"
+            },
+            {
+              "end": 208,
+              "start": 187,
+              "tag": "PP_define_body",
+              "text": "9 //ahb0 slave number"
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 217,
+              "start": 210,
+              "tag": "`define"
+            },
+            {
+              "end": 231,
+              "start": 218,
+              "tag": "PP_Identifier",
+              "text": "SRAM0_8KB_NUM"
+            },
+            {
+              "end": 231,
+              "start": 231,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 239,
+              "start": 232,
+              "tag": "`define"
+            },
+            {
+              "end": 254,
+              "start": 240,
+              "tag": "PP_Identifier",
+              "text": "SRAM0_16KB_NUM"
+            },
+            {
+              "end": 254,
+              "start": 254,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 262,
+              "start": 255,
+              "tag": "`define"
+            },
+            {
+              "end": 277,
+              "start": 263,
+              "tag": "PP_Identifier",
+              "text": "SRAM0_32KB_NUM"
+            },
+            {
+              "end": 277,
+              "start": 277,
+              "tag": "PP_define_body",
+              "text": ""
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        },
+        {
+          "children": [
+            {
+              "end": 285,
+              "start": 278,
+              "tag": "`define"
+            },
+            {
+              "end": 300,
+              "start": 286,
+              "tag": "PP_Identifier",
+              "text": "SRAM0_SRAM_NUM"
+            },
+            {
+              "end": 356,
+              "start": 306,
+              "tag": "PP_define_body",
+              "text": "`SRAM0_8KB_NUM + `SRAM0_16KB_NUM + `SRAM0_32KB_NUM"
+            }
+          ],
+          "tag": "kPreprocessorDefine"
+        }
+      ],
+      "tag": "kDescriptionList"
+    }
+  }
+}

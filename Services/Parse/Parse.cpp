@@ -17,7 +17,7 @@ void VerilogStudio::Parse::ReadJson(string &JsonFile) {
     in.close();
 
     ParseResult result = doc.Parse(json_content.c_str());
-    if(!result){
+    if (!result) {
         cerr << "JSON parse error:" << GetParseErrorFunc(result.Code()), result.Offset();
     }
 }
@@ -45,6 +45,7 @@ std::string VerilogStudio::Parse::generate_hex(const unsigned int len) {
 
 /**********************************************/
 void VerilogStudio::Parse::ParseVerilog(string &FileName) {
+    cout << FileName << endl;
     string FileGuid = generate_hex(15);
     FileNameGuid[FileGuid] = FileName;
     if (doc.HasMember(FileName.c_str())) {
@@ -105,7 +106,7 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                                                                         }
                                                                                                                                     } else if (itr4->value.IsString() && itr4->value == "SymbolIdentifier") {
                                                                                                                                         //cout << (itr4 + 1)->value.GetString() << endl;
-                                                                                                                                        tempPortDec += ":" +static_cast<string>((itr4 + 1)->value.GetString());
+                                                                                                                                        tempPortDec += ":" + static_cast<string>((itr4 + 1)->value.GetString());
                                                                                                                                         pModule->AddPortDeclaration(tempPortDec);
                                                                                                                                         tempPortDec.clear();
                                                                                                                                     }
@@ -140,7 +141,7 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                                         }
                                                                                                     }
                                                                                                 }
-                                                                                            } else if(Dimensions->value == ";"){
+                                                                                            } else if (Dimensions->value == ";") {
                                                                                                 pModule->AddPortEnd(Dimensions->value.GetString());
                                                                                             }
                                                                                         }
@@ -198,10 +199,9 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                            } else if (ModuleItem->value == "kDataDeclaration" && (ModuleItem - 1)->value.IsArray() && (ModuleItem - 1)->value.IsArray()) {
+                                                                            } else if (ModuleItem->value == "kDataDeclaration" && (ModuleItem - 1)->value.IsArray()) {
                                                                                 if ((ModuleItem - 1)->value.IsArray()) {
-                                                                                    for (auto itr = (ModuleItem - 1)->value.Begin();
-                                                                                         itr != (ModuleItem - 1)->value.End(); ++itr) {
+                                                                                    for (auto itr = (ModuleItem - 1)->value.Begin(); itr != (ModuleItem - 1)->value.End(); ++itr) {
                                                                                         if (itr->IsObject()) {
                                                                                             for (auto itr1 = itr->GetObject().MemberBegin(); itr1 != itr->GetObject().MemberEnd(); ++itr1) {
                                                                                                 if ((itr1 + 1)->value == "kInstantiationBase" && itr1->value.IsArray()) {
@@ -250,8 +250,8 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                                                                                                 } else if (itr5->value.IsArray() && (itr5 + 1)->value == "kGateInstance") {
                                                                                                                                     GetInstName(itr5);
                                                                                                                                 }
-                                                                                                                                pModule->AddIncludeModuleName(UnInstModuleName,InstModuleName);
-                                                                                                                                pModule->AddIncludeModuleNameMap(InstModuleName,UnInstModuleName);
+                                                                                                                                pModule->AddIncludeModuleName(UnInstModuleName, InstModuleName);
+                                                                                                                                pModule->AddIncludeModuleNameMap(InstModuleName, UnInstModuleName);
                                                                                                                                 pModule->AddIncludeModule();
                                                                                                                                 UnInstModuleName.clear();
                                                                                                                                 InstModuleName.clear();
@@ -276,6 +276,13 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
                                                     }
                                                 }
                                             }
+//                                            if(!ModuleNames.empty()){
+//                                                cout << "pModuele is NUll" <<endl;
+//                                                GetKVFileInstModule(FileGuid);
+//                                                cout << "GetKVFileInstModule" << endl;
+//                                                GetKVInstModule();
+//                                                cout << "ModuleNames" << endl;
+//                                            }
                                         }
                                     }
                                 }
@@ -287,8 +294,14 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
         }
     }
     KVFileModule[FileGuid] = ModuleNames;
-    GetKVFileInstModule(FileGuid);
-    GetKVInstModule();
+    cout << "KVFileModule" << endl;
+    if(!ModuleNames.empty()){
+        cout << "pModuele is NUll" <<endl;
+        GetKVFileInstModule(FileGuid);
+        cout << "GetKVFileInstModule" << endl;
+        GetKVInstModule();
+        cout << "ModuleNames" << endl;
+    }
     ModuleNames.clear();
 }
 
@@ -354,20 +367,21 @@ void VerilogStudio::Parse::GetModuleName(Value::MemberIterator &ModuleNameItr) {
     shared_ptr<Module> tempPModule(new Module);
     pModule = tempPModule;
     ModuleGuid[guid] = pModule;
-
     for (auto mHeader = (ModuleNameItr - 1)->value.Begin(); mHeader != (ModuleNameItr - 1)->value.End(); ++mHeader) {
         if (mHeader->IsObject()) {
             for (auto moduleName = mHeader->GetObject().MemberBegin(); moduleName != mHeader->GetObject().MemberEnd(); ++moduleName) {
                 if (moduleName->value.IsString() && moduleName->value == "SymbolIdentifier" && (moduleName + 1)->name == "text") {
                     //cout << (moduleName + 1)->value.GetString() << endl;
-                    pModule->AddModuleName(guid,(moduleName + 1)->value.GetString());
+                    pModule->AddModuleName(guid, (moduleName + 1)->value.GetString());
                     KVModuleGuid[guid] = (moduleName + 1)->value.GetString();
                     ModuleNames.emplace_back((moduleName + 1)->value.GetString());
                 } else if (moduleName->value.IsString() && moduleName->value == "kParenGroup") {
                     GetPortName(moduleName);
-                } else if ((moduleName + 1)->value.IsString() && (moduleName + 1)->value == "kFormalParameterListDeclaration" && moduleName->value.IsArray()) {
+                } else if(moduleName->value.IsString() && moduleName->value == ";"){
+                    pModule->AddEndBracketsLocation((moduleName - 1)->value.GetInt());
+                }/*else if (moduleName->value.IsString() && moduleName->value == "kFormalParameterListDeclaration" && (moduleName - 1)->value.IsArray()) {
                     GetParameter(moduleName);
-                }
+                }*/
             }
         }
     }
@@ -396,7 +410,7 @@ void VerilogStudio::Parse::RepeatStruct(Value::MemberIterator &RepeatItr) {
                            (kUnqualifiedId + 1)->name == "text") {
                     //port name
                     //cout <<(kUnqualifiedId+1)->value.GetString()<<endl;
-                    tempPortDec += static_cast<string>((kUnqualifiedId+1)->value.GetString());
+                    tempPortDec += static_cast<string>((kUnqualifiedId + 1)->value.GetString());
                     pModule->AddPortName((kUnqualifiedId + 1)->value.GetString());
                     pModule->AddPortDeclaration(tempPortDec);
                     tempPortDec.clear();
@@ -410,16 +424,12 @@ void VerilogStudio::Parse::RepeatStruct(Value::MemberIterator &RepeatItr) {
 void VerilogStudio::Parse::GetPortName(Value::MemberIterator &PortNameItr) {
     for (auto portDec = (PortNameItr - 1)->value.Begin(); portDec != (PortNameItr - 1)->value.End(); ++portDec) {
         if (portDec->IsObject()) {
-            for (auto portDecList = portDec->GetObject().MemberBegin();
-                 portDecList != portDec->GetObject().MemberEnd(); ++portDecList) {
+            for (auto portDecList = portDec->GetObject().MemberBegin(); portDecList != portDec->GetObject().MemberEnd(); ++portDecList) {
                 if (portDecList->value == "kPortDeclarationList" && (portDecList - 1)->value.IsArray()) {
-                    for (auto kPortList = (portDecList - 1)->value.Begin();
-                         kPortList != (portDecList - 1)->value.End(); ++kPortList) {
+                    for (auto kPortList = (portDecList - 1)->value.Begin(); kPortList != (portDecList - 1)->value.End(); ++kPortList) {
                         if (kPortList->IsObject()) {
-                            for (auto kPort = kPortList->GetObject().MemberBegin();
-                                 kPort != kPortList->GetObject().MemberEnd(); ++kPort) {
-                                if (kPort->value.IsString() && kPort->value == "kPort" &&
-                                    (kPort - 1)->value.IsArray()) {
+                            for (auto kPort = kPortList->GetObject().MemberBegin(); kPort != kPortList->GetObject().MemberEnd(); ++kPort) {
+                                if (kPort->value.IsString() && kPort->value == "kPort" && (kPort - 1)->value.IsArray()) {
                                     for (auto kPortReference = (kPort - 1)->value.Begin();
                                          kPortReference != (kPort - 1)->value.End(); ++kPortReference) {
                                         if (kPortReference->IsObject()) {
@@ -432,17 +442,20 @@ void VerilogStudio::Parse::GetPortName(Value::MemberIterator &PortNameItr) {
                                             }
                                         }
                                     };
-                                } else if (kPort->value.IsString() && kPort->value == "kPortDeclaration" &&
-                                           (kPort - 1)->value.IsArray()) {
+                                } else if (kPort->value.IsString() && kPort->value == "kPortDeclaration" && (kPort - 1)->value.IsArray()) {
                                     //get port dec
                                     GetPortDec(kPort);
-                                }else if(kPort->value == ","){
+                                } else if (kPort->value == ",") {
                                     pModule->AddPortEnd(kPort->value.GetString());
                                 }
                             }
                         }
                     }
                 }
+                if (portDecList->value == "(" && (portDecList - 1)->value.IsInt()) {
+                    pModule->AddBracketsLocation((portDecList - 1)->value.GetInt());
+                }
+
             }
         }
     }
@@ -472,7 +485,7 @@ void VerilogStudio::Parse::RepeatBitWidth(Value::MemberIterator &RepeatItr) {
                                                                                 for (auto wideNum = decNum->GetObject().MemberBegin(); wideNum != decNum->GetObject().MemberEnd(); ++wideNum) {
                                                                                     if (wideNum->name == "text") {
                                                                                         //cout <<wideNum->value.GetString() << endl;
-                                                                                        tempPortDec += static_cast<string>(wideNum->value.GetString())+":";
+                                                                                        tempPortDec += static_cast<string>(wideNum->value.GetString()) + ":";
                                                                                     }
                                                                                 }
                                                                             }
@@ -498,14 +511,16 @@ void VerilogStudio::Parse::RepeatBitWidth(Value::MemberIterator &RepeatItr) {
 
 /**********************************************/
 void VerilogStudio::Parse::GetRegName(Value::MemberIterator &RegNameItr) {
-    for (auto itr3 = (RegNameItr - 1)->value.Begin(); itr3 != (RegNameItr - 1)->value.End(); ++itr3) {
-        if (itr3->IsObject()) {
-            for (auto itr4 = itr3->GetObject().MemberBegin(); itr4 != itr3->GetObject().MemberEnd(); ++itr4) {
-                if (itr4->value.IsString()) {
-                    //reg
-                    //cout <<itr4->value.GetString() << endl;
-                    //tempPortDec.clear();
-                    tempPortDec += static_cast<string>(itr4->value.GetString())+":";
+    if ((RegNameItr - 1)->value.IsArray()) {
+        for (auto itr3 = (RegNameItr - 1)->value.Begin(); itr3 != (RegNameItr - 1)->value.End(); ++itr3) {
+            if (itr3->IsObject()) {
+                for (auto itr4 = itr3->GetObject().MemberBegin(); itr4 != itr3->GetObject().MemberEnd(); ++itr4) {
+                    if (itr4->value.IsString()) {
+                        //reg
+                        //cout <<itr4->value.GetString() << endl;
+                        //tempPortDec.clear();
+                        tempPortDec += static_cast<string>(itr4->value.GetString()) + ":";
+                    }
                 }
             }
         }
@@ -514,37 +529,25 @@ void VerilogStudio::Parse::GetRegName(Value::MemberIterator &RegNameItr) {
 
 /**********************************************/
 void VerilogStudio::Parse::GetPortDec(Value::MemberIterator &PortDecItr) {
-    for (auto kPortReference = (PortDecItr - 1)->value.Begin();
-         kPortReference != (PortDecItr - 1)->value.End(); ++kPortReference) {
+    for (auto kPortReference = (PortDecItr - 1)->value.Begin(); kPortReference != (PortDecItr - 1)->value.End(); ++kPortReference) {
         if (kPortReference->IsObject()) {
-            for (auto portName = kPortReference->GetObject().MemberBegin();
-                 portName != kPortReference->GetObject().MemberEnd(); ++portName) {
-                if (portName->value.IsString() && portName->value == "output" || portName->value == "input" ||
-                    portName->value == "inout" || portName->value == "wire" || portName->value == "reg") {
-                    if(portName->value == "output" || portName->value == "input" ||
-                       portName->value == "inout" && (portName-1)->name=="start"){
-                        //cout<<(portName-1)->value.GetInt() << endl;
-                        //cout<<(portName)->value.GetString() << endl;
-                    }
+            for (auto portName = kPortReference->GetObject().MemberBegin(); portName != kPortReference->GetObject().MemberEnd(); ++portName) {
+                if (portName->value == "output" || portName->value == "input" || portName->value == "inout" || portName->value == "wire" || portName->value == "reg") {
                     //port type
-                    //cout<<(portName-1)->value.GetInt() << endl;
-                    tempPortDec += static_cast<string>(portName->value.GetString())+":";
+                    //cout<<portName->value.GetString() << endl;
+                    tempPortDec += static_cast<string>(portName->value.GetString()) + ":";
                 } else if (portName->value.IsArray()) {
                     RepeatStruct(portName);
-                } else if (portName->value.IsString() && portName->value == "kDataType" &&(portName - 1)->value.IsArray()) {
+                } else if (portName->value.IsString() && portName->value == "kDataType" && (portName - 1)->value.IsArray()) {
                     for (auto itr = (portName - 1)->value.Begin(); itr != (portName - 1)->value.End(); ++itr) {
                         if (itr->IsObject()) {
-                            for (auto itr2 = itr->GetObject().MemberBegin();
-                                 itr2 != itr->GetObject().MemberEnd(); ++itr2) {
-                                if (itr2->value.IsString() && (itr2 - 1)->value.IsArray() &&
-                                    itr2->value == "kDataTypePrimitive") {
+                            for (auto itr2 = itr->GetObject().MemberBegin(); itr2 != itr->GetObject().MemberEnd(); ++itr2) {
+                                if (itr2->value.IsString() && (itr2 - 1)->value.IsArray() && itr2->value == "kDataTypePrimitive") {
                                     //get reg
                                     GetRegName(itr2);
-                                } else if (itr2->value.IsString() && (itr2 - 1)->value.IsArray() &&
-                                           itr2->value == "kPackedDimensions" && (itr2 - 1)->value.IsArray()) {
+                                } else if (itr2->value.IsString() && (itr2 - 1)->value.IsArray() && itr2->value == "kPackedDimensions") {
                                     //get bit width
                                     RepeatBitWidth(itr2);
-
                                 }
                             }
                         }
@@ -595,7 +598,7 @@ void VerilogStudio::Parse::GetInstPort(Value::MemberIterator &InstPortItr) {
                                                     ResStr += static_cast<string>((itr13 + 1)->value.GetString());
                                                 } else if (itr13->value.IsArray() && (itr13 + 1)->value == "kParenGroup") {
                                                     // inst port name
-                                                    ResStr = ResStr + ":" +RepeatInstStruct(itr13);
+                                                    ResStr = ResStr + ":" + RepeatInstStruct(itr13);
                                                 }
                                             }
                                         }
@@ -606,6 +609,9 @@ void VerilogStudio::Parse::GetInstPort(Value::MemberIterator &InstPortItr) {
                         }
                     }
                 }
+                if ((itr9 + 1)->value == "(" && itr9->value.IsInt()) {
+                    pModule->AddPortActualLocation(itr9->value.GetInt());
+                }
             }
         }
     }
@@ -613,8 +619,8 @@ void VerilogStudio::Parse::GetInstPort(Value::MemberIterator &InstPortItr) {
 
 /**********************************************/
 void VerilogStudio::Parse::GetParameter(Value::MemberIterator &ParameterItr) {
-    vector<string> tempParameterName,tempParameterValue;
-    for (auto itr = ParameterItr->value.Begin(); itr != ParameterItr->value.End(); ++itr) {
+    vector<string> tempParameterName, tempParameterValue;
+    for (auto itr = (ParameterItr - 1)->value.Begin(); itr != (ParameterItr - 1)->value.End(); ++itr) {
         if (itr->IsObject()) {
             for (auto itr2 = itr->GetObject().MemberBegin(); itr2 != itr->GetObject().MemberEnd(); ++itr2) {
                 if ((itr2 + 1)->value == "kParenGroup" && (itr2 + 1)->value.IsString() && itr2->value.IsArray()) {
@@ -625,7 +631,7 @@ void VerilogStudio::Parse::GetParameter(Value::MemberIterator &ParameterItr) {
                                     for (auto itr5 = itr4->value.Begin(); itr5 != itr4->value.End(); ++itr5) {
                                         if (itr5->IsObject()) {
                                             for (auto itr6 = itr5->GetObject().MemberBegin(); itr6 != itr5->GetObject().MemberEnd(); ++itr6) {
-                                                if ((itr6 + 1)->value == "kParamDeclaration" && (itr6 + 1)->value.IsString() && itr6->value.IsArray()) {
+                                                if ((itr6 + 1)->value.IsString() && (itr6 + 1)->value == "kParamDeclaration") {
                                                     for (auto itr7 = itr6->value.Begin(); itr7 != itr6->value.End(); ++itr7) {
                                                         if (itr7->IsObject()) {
                                                             for (auto itr8 = itr7->GetObject().MemberBegin(); itr8 != itr7->GetObject().MemberEnd(); ++itr8) {
@@ -638,7 +644,7 @@ void VerilogStudio::Parse::GetParameter(Value::MemberIterator &ParameterItr) {
                                                                                         if (itr11->IsObject()) {
                                                                                             for (auto itr12 = itr11->GetObject().MemberBegin(); itr12 != itr11->GetObject().MemberEnd(); ++itr12) {
                                                                                                 if (itr12->value.IsString() && itr12->value == "SymbolIdentifier" && (itr12 + 1)->name == "text") {
-                                                                                                    //cout << (itr12 + 1)->value.GetString()<<" ";
+                                                                                                    //cout <<(itr12 + 1)->value.GetString()<<" ";
                                                                                                     tempParameterName.emplace_back((itr12 + 1)->value.GetString());
                                                                                                 }
                                                                                             }
@@ -662,7 +668,7 @@ void VerilogStudio::Parse::GetParameter(Value::MemberIterator &ParameterItr) {
                                                                                                             if (decNum->IsObject()) {
                                                                                                                 for (auto wideNum = decNum->GetObject().MemberBegin(); wideNum != decNum->GetObject().MemberEnd(); ++wideNum) {
                                                                                                                     if (wideNum->name == "text") {
-                                                                                                                        //cout << wideNum->value.GetString() << endl;
+                                                                                                                        // cout << wideNum->value.GetString() << endl;
                                                                                                                         tempParameterValue.emplace_back(wideNum->value.GetString());
                                                                                                                     }
                                                                                                                 }
@@ -693,7 +699,7 @@ void VerilogStudio::Parse::GetParameter(Value::MemberIterator &ParameterItr) {
             }
         }
     }
-    pModule->AddParameter(tempParameterName,tempParameterValue);
+    pModule->AddParameter(tempParameterName, tempParameterValue);
 }
 
 /**********************************************/
@@ -732,7 +738,7 @@ void VerilogStudio::Parse::GetParameterInst(Value::MemberIterator &ParameterItr)
                                                                                     ResStr += static_cast<string>((itr17 + 1)->value.GetString());
                                                                                 } else if ((itr17 + 1)->value.IsString() && (itr17 + 1)->value == "kParenGroup" && itr17->value.IsArray()) {
                                                                                     //cout<< "9090" << RepeatInstStruct(itr17) <<endl;
-                                                                                    ResStr += ":"+RepeatInstStruct(itr17);
+                                                                                    ResStr += ":" + RepeatInstStruct(itr17);
                                                                                 }
                                                                             }
                                                                         }
@@ -756,10 +762,11 @@ void VerilogStudio::Parse::GetParameterInst(Value::MemberIterator &ParameterItr)
     }
 }
 
+/**********************************************/
 std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetModuleNameGuid(std::string &ModuleName) {
-    unordered_map<string,string> temp;
+    unordered_map<string, string> temp;
     auto it = find_if(KVModuleGuid.begin(), KVModuleGuid.end(), finder(ModuleName));
-    if(it!=KVModuleGuid.end()){
+    if (it != KVModuleGuid.end()) {
         temp = GetIncludeModuleMap((*it).first);
     }
 
@@ -772,11 +779,12 @@ std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetModuleName
     return temp;
 }
 
+/**********************************************/
 std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetIncludeModuleMap(const std::string &guid) {
     unordered_map<string, string> temp;
 
     auto search = ModuleGuid.find(guid);
-    if(search!=ModuleGuid.end()){
+    if (search != ModuleGuid.end()) {
         temp = search->second->GetIncludeModuleNameMap();
     }
 
@@ -789,15 +797,16 @@ std::unordered_map<std::string, std::string> VerilogStudio::Parse::GetIncludeMod
     return temp;
 }
 
+/**********************************************/
 std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleName) {
     string temp;
     string filename;
 
-    for(auto &it:KVFileInstModule){
-        auto ss = find_if(it.second.begin(),it.second.end(),[ModuleName](string& modulename){
+    for (auto &it: KVFileInstModule) {
+        auto ss = find_if(it.second.begin(), it.second.end(), [&ModuleName](string &modulename) {
             return modulename == ModuleName;
         });
-        if(ss!=it.second.end()){
+        if (ss != it.second.end()) {
             temp = it.first;
         }
 
@@ -809,37 +818,54 @@ std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleNam
     }
 
     auto search = FileNameGuid.find(temp);
-    if(search != FileNameGuid.end()){
+    if (search != FileNameGuid.end()) {
         filename = search->second;
     }
 
     return filename;
 }
 
-void VerilogStudio::Parse::GetKVFileInstModule(string& fileGuid) {
-    auto tempUnMap = pModule->GetIncludeModuleNameMap();
-    vector<string> tempVec;
-    for(auto &it:tempUnMap){
-        tempVec.emplace_back(it.first);
+/**********************************************/
+void VerilogStudio::Parse::GetKVFileInstModule(string &fileGuid) {
+    cout << "in KVFileInstModule()" <<endl;
+    if(!pModule->GetIncludeModuleNameMap().empty()){
+        cout << "IncludeModuleNameMap() is not empty()" <<endl;
+        vector<string> tempVec;
+        for (auto &it: pModule->GetIncludeModuleNameMap()) {
+            cout << it.first << endl;
+            tempVec.emplace_back(it.first);
+        }
+        cout << tempVec.size() <<endl;
+        KVFileInstModule[fileGuid] = tempVec;
+    }else{
+        return;
     }
-    KVFileInstModule[fileGuid] = tempVec;
 }
 
+/**********************************************/
 std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
     string filename;
     string temp = KVInstModule[ModuleName];
+    if (temp.empty()) {
+        for (auto &it: KVInstModule) {
+            if (it.first == ModuleName) {
+                temp = ModuleName;
+            }
+        }
+    }
 
-    for(auto &it:KVFileModule){
-        auto ss = find_if(it.second.begin(),it.second.end(),[temp](string& modulename){
+    for (auto &it: KVFileModule) {
+        auto ss = find_if(it.second.begin(), it.second.end(), [&temp](string &modulename) {
             return modulename == temp;
         });
-        if(ss!=it.second.end()){
+        if (ss != it.second.end()) {
             temp = it.first;
+            break;
         }
     }
 
     auto search = FileNameGuid.find(temp);
-    if(search != FileNameGuid.end()){
+    if (search != FileNameGuid.end()) {
         filename = search->second;
     }
 
@@ -847,28 +873,68 @@ std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
 
 }
 
+/**********************************************/
 void VerilogStudio::Parse::GetKVInstModule() {
-    if(!pModule->GetIncludeModuleNameMap().empty()){
-        for(auto &it:pModule->GetIncludeModuleNameMap()){
+    if (!pModule->GetIncludeModuleNameMap().empty()) {
+        cout << "in GetKVInstModule()"<<endl;
+        for (auto &it: pModule->GetIncludeModuleNameMap()) {
+            cout << it.first<<":"<<it.second <<endl;
             KVInstModule[it.first] = it.second;
         }
     }
 }
 
+/**********************************************/
 std::string VerilogStudio::Parse::GetPortEnd(std::string &ModuleName) {
-    string temp = KVInstModule[ModuleName];
-    for(auto &it:KVModuleGuid){
-        if(it.second == temp){
-            temp = it.first;
-            break;
-        }
-    }
-    return ModuleGuid[temp]->GetPortEnd();
+    return ModuleGuid[FindGuid(ModuleName)]->GetPortEnd();
 }
 
+/**********************************************/
 std::string VerilogStudio::Parse::GetSourceModuleName(std::string &InstModuleName) {
-    return KVInstModule[InstModuleName];
+    auto search = KVInstModule.find(InstModuleName);
+    if (search != KVInstModule.end()) {
+        return KVInstModule[InstModuleName];
+    } else {
+        return InstModuleName;
+    }
 }
+
+/**********************************************/
+int VerilogStudio::Parse::GetBracketsLocation(std::string &ModuleName) {
+    return ModuleGuid[FindGuid(ModuleName)]->GetBracketsLocation();
+}
+
+/**********************************************/
+int VerilogStudio::Parse::GetEndBracketsLocation(std::string &ModuleName) {
+    return ModuleGuid[FindGuid(ModuleName)]->GetEndBracketsLocation();
+}
+
+/**********************************************/
+std::string VerilogStudio::Parse::FindGuid(std::string &ModuleName) {
+    auto search = KVInstModule.find(ModuleName);
+    string temp;
+    if (search != KVInstModule.end()) {
+        temp = KVInstModule[ModuleName];
+        if (temp.empty()) {
+            for (auto &it: KVInstModule) {
+                if (it.first == ModuleName) {
+                    temp = ModuleName;
+                    break;
+                }
+            }
+        }
+        for (auto &it: KVModuleGuid) {
+            if (it.second == temp) {
+                temp = it.first;
+                break;
+            }
+        }
+    }
+    return temp;
+}
+
+
+
 
 
 

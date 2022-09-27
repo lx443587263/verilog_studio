@@ -4,6 +4,7 @@
 
 #include "ChangeLine.hpp"
 
+/**********************************************/
 void VerilogStudio::ChangeLine::OpenFile(std::string &fileName) {
     ifstream in(fileName);
     stringstream buf;
@@ -12,21 +13,37 @@ void VerilogStudio::ChangeLine::OpenFile(std::string &fileName) {
     in.close();
 }
 
-void VerilogStudio::ChangeLine::RegexReplace(std::string &srcStr, std::string &desStr) {
-    regex pattern(srcStr);
-    regex_replace(FileContent,pattern,desStr);
-}
-
+/**********************************************/
 void VerilogStudio::ChangeLine::WriteFile(std::string &fileName) {
     ofstream ou(fileName);
     ou << FileContent;
     ou.close();
 }
 
-void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortName,std::string& portEnd,std::string& sourceModule) {
+/**********************************************/
+void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortName,std::string& portEnd,std::string& sourceModule,int bracketsLocation,int endBracketsLocation) {
     OpenFile(fileName);
     string::size_type pos;
+    string tempPortName;
     auto modulePos = FileContent.find(sourceModule);
+    if(PortName.find("]")!=string::npos){
+        auto tempPos = PortName.find("]");
+        tempPortName = PortName.substr(tempPos+1);
+    }else if(PortName.find("input")!=string::npos){
+        auto tempPos = PortName.find("input");
+        tempPortName = PortName.substr(tempPos+5);
+    }else if(PortName.find("output")!=string::npos){
+        auto tempPos = PortName.find("output");
+        tempPortName = PortName.substr(tempPos+6);
+    }else if(PortName.find("inout")!=string::npos) {
+        auto tempPos = PortName.find("inout");
+        tempPortName = PortName.substr(tempPos + 5);
+    }
+    if(portEnd == ";"){
+        FileContent.insert(static_cast<string::size_type>(bracketsLocation+1),tempPortName + ",");
+        modulePos = endBracketsLocation;
+    }
+
     if(PortName.find("input",modulePos)!= string::npos){
         pos = FileContent.find("input",modulePos);
     } else if(PortName.find("output",modulePos)!= string::npos){
@@ -40,6 +57,7 @@ void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortN
     WriteFile(fileName);
 }
 
+/**********************************************/
 void VerilogStudio::ChangeLine::RemoveTopModule(std::string& TopModuleName,std::vector<std::string> &Vec) {
     auto ss = find_if(Vec.begin(),Vec.end(),[&](string& modulename){
         return modulename == TopModuleName;
@@ -49,21 +67,76 @@ void VerilogStudio::ChangeLine::RemoveTopModule(std::string& TopModuleName,std::
     }
 }
 
+/**********************************************/
 std::string VerilogStudio::ChangeLine::FlipPort(std::string &PortName) {
-    regex inputRe("input");
-    regex outputRe("output");
     if(PortName.find("input")!= string::npos){
-        PortName = regex_replace(PortName,inputRe,"output");
+        PortName.replace(PortName.find("input"), 5,"output");
     } else if(PortName.find("output")!= string::npos){
-        PortName = regex_replace(PortName,outputRe,"input");
+        PortName.replace(PortName.find("output"), 6,"input");
     }else if(PortName.find("inout")!= string::npos){
         return PortName;
     }
     return PortName;
 }
 
-void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &PortName) {
+/**********************************************/
+void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &PortName,std::string &instModuleName) {
+    string tempPortName;
+    OpenFile(fileName);
+    string::size_type pos;
+    string DesPortName = PortName;
+    if(fileName == TopModuleFileName){
+        if(PortName.find("in_")!=string::npos){
+            DesPortName.replace(DesPortName.find("in_"),3,"");
+        } else if(PortName.find("out_")!=string::npos){
+            DesPortName.replace(DesPortName.find("out_"),4,"");
+        }
+    }
+    if(PortName.find("]")!=string::npos){
+        auto tempPos = PortName.find("]");
+        tempPortName = "."+PortName.substr(tempPos+1)+"("+DesPortName.substr(tempPos+1)+"),\n";
+    }else if(PortName.find("input")!=string::npos){
+        auto tempPos = PortName.find("input");
+        tempPortName = "."+PortName.substr(tempPos+6)+"("+DesPortName.substr(tempPos+5)+"),\n";
+    }else if(PortName.find("output")!=string::npos){
+        auto tempPos = PortName.find("output");
+        tempPortName = "."+PortName.substr(tempPos+7)+"("+DesPortName.substr(tempPos+6)+"),\n";
+    }else if(PortName.find("inout")!=string::npos) {
+        auto tempPos = PortName.find("inout");
+        tempPortName = "." + PortName.substr(tempPos + 6) + "(" + DesPortName.substr(tempPos + 5) + "),\n";
+    }
+    if(FileContent.find(instModuleName+"(")!= string::npos){
+        pos = FileContent.find(instModuleName);
+    }
+    FileContent.insert(pos+instModuleName.size()+2,"        "+tempPortName);
+    WriteFile(fileName);
+}
 
+/**********************************************/
+void VerilogStudio::ChangeLine::AddToTopModule(std::string& fileName,std::string &PortName,std::string& portEnd,int bracketsLocation,int endBracketsLocation) {
+    OpenFile(fileName);
+    if(PortName.find("input")!=string::npos){
+        PortName.replace(PortName.find("input"), 5,"wire");
+    }else if(PortName.find("output")!=string::npos){
+        PortName.replace(PortName.find("output"), 6,"wire");
+    }else if(PortName.find("inout")!=string::npos){
+        PortName.replace(PortName.find("inout"), 5,"wire");
+    }
+
+    if(PortName.find("in_")!=string::npos){
+        PortName.replace(PortName.find("in_"),3,"");
+    }else if(PortName.find("out_")!=string::npos){
+        PortName.replace(PortName.find("out_"),4,"");
+    }
+//    if (portEnd == ";") {
+//        FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), PortName + ",\n    ");
+//    }
+    FileContent.insert(static_cast<string::size_type>(endBracketsLocation + 1), "\n    "+PortName + ";");
+    WriteFile(fileName);
+}
+
+void VerilogStudio::ChangeLine::GetTopModuleName(std::string &TMFN) {
+    TopModuleFileName = TMFN;
 }
 
 

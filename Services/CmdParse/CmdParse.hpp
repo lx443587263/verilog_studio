@@ -28,7 +28,12 @@ namespace VerilogStudio {
     using namespace cmdline::detail;
     /***************************class*****************************/
     class CmdParse : public IService {
+        /**********************************************/
     public:
+        CmdParse(){}
+
+        ~CmdParse(){}
+
         void CmdLineParse(int argc, char *argv[]);
 
         vector<string> ReadFileToVec(const string &FileList);
@@ -45,6 +50,9 @@ namespace VerilogStudio {
 
         string& Trim(string& str);
 
+        void AddLine(string& connectRule);
+
+    /**********************************************/
     private:
         vector<string>              FileNameVec;
         string                      AllFileName;

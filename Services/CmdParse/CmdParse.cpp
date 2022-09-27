@@ -3,6 +3,7 @@
 //
 #include "CmdParse.hpp"
 
+/**********************************************/
 void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     //string jsonname = "/Users/liuxi/CLionProjects/verilog_studio/temp.json";
     shared_ptr<cmdline::parser> cmdparse = cmdline::parser::makeB_OBJ<cmdline::parser>();
@@ -10,11 +11,13 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
     pDraw = DrawTree::makeB_OBJ<DrawTree>();
     pChangeLine = ChangeLine::makeB_OBJ<ChangeLine>();
+    cmdparse->footer("version:v1.2");
     cmdparse->add("inter", 'a', "command interaction");
     cmdparse->add<string>("input", 'i', "input filename. example: [-i] <filename>", false, "");
     cmdparse->add<string>("filelist", 'l', "input filelist. example: [-l] <filelist>", false, "");
     cmdparse->add<string>("top", 't', "top module. example: [-t] <modulename>", false, "");
     cmdparse->add<string>("change", 'c', "change line. example: [-c] <change line filename>", false, "");
+    cmdparse->add("je", 'j', "thread");
     cmdparse->add("hierarchy", 'h', "show hierarchy");
     cmdparse->parse_check(argc, argv);
     if (argc == 1) {
@@ -26,11 +29,12 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     }
     if (cmdparse->exist("input")) {
 
-        FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
-                       "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
-                       "/Users/liuxi/CLionProjects/verilog_studio/test/test04.v",
-                       "/Users/liuxi/CLionProjects/verilog_studio/test/test05.v",
-                       "/Users/liuxi/CLionProjects/verilog_studio/test/test06.v"};
+        //FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
+//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
+//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test04.v",
+//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test05.v",
+//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test06.v"};
+        FileNameVec = {"testdefine.v"};
         ThreadPool pool(4);
         string JsonPath = cmdparse->get<string>("input");
         pParse->ReadJson(JsonPath);
@@ -42,6 +46,9 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         });
     }
     if (cmdparse->exist("filelist")) {
+        if(!FileNameVec.empty()){
+            FileNameVec.clear();
+        }
         ReadFileToVec(cmdparse->get<string>("filelist")).swap(FileNameVec);
         //ReadFileToVec("/Users/liuxi/CLionProjects/verilog_studio/file.list");
         FileNameStr();
@@ -50,14 +57,24 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
             cerr << "JsonPath is empty" << endl;
         }
 
-        ThreadPool pool(4);
+
         pParse->ReadJson(JsonPath);
 
-        pool.enqueue([&]() {
+
+        if (cmdparse->exist("je")){
+            ThreadPool pool(4);
+            pool.enqueue([&]() {
+                for (auto &itr: FileNameVec) {
+                pParse->ParseVerilog(itr);
+                }
+            });
+
+        }else{
             for (auto &itr: FileNameVec) {
                 pParse->ParseVerilog(itr);
             }
-        });
+        }
+
     }
     if (cmdparse->exist("hierarchy")) {
         auto tr = pHierarchy->CreateTree(TopModuleName, pParse);
@@ -70,42 +87,28 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         ReadFileToVec(cmdparse->get<string>("change")).swap(ChangeLineContent);
 
         for (auto &it: ChangeLineContent) {
-            vector<string> tempPath = split(it, "=>");
-            //tempPath[1] = Trim(tempPath[1]);
-            vector<string> path1 = split(tempPath[0], ".");
-            vector<string> path2 = split(tempPath[1], ".");
-            string portName = path1.back();
-            path1.pop_back();
-            vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
-            string FlipModule = pHierarchy->GetFlipModule();
-            string lastModuleName = InstModuleNamePath.back();
-            pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
-            for (auto &it: InstModuleNamePath) {
-                if (it == FlipModule) {
-                    portName = pChangeLine->FlipPort(portName);
-                }
-                string tempFileName = pParse->GetInstLocationFileName(it);
-                string tempSourceFileName = pParse->GetSourceFileName(it);
-                string tempPortEnd = pParse->GetPortEnd(it);
-                string tempSrcModule = pParse->GetSourceModuleName(it);
-                pChangeLine->AddPort(tempSourceFileName,portName,tempPortEnd,tempSrcModule);
+            if(it.empty()){
+                continue;
             }
+            AddLine(it);
         }
     }
 
 }
 
+/**********************************************/
 std::vector<std::string> VerilogStudio::CmdParse::ReadFileToVec(const std::string &FileList) {
     ifstream file(FileList, ios::in);
     vector<string> temp;
     if (!file.is_open())
         cout << "error" << endl;
     string s;
-    while (file >> s)
+    while (getline(file,s))
         temp.emplace_back(s);
     return temp;
 }
 
+/**********************************************/
 std::string VerilogStudio::CmdParse::FileNameStr() {
     for (auto &it: FileNameVec) {
         AllFileName = AllFileName + " " + it;
@@ -113,21 +116,25 @@ std::string VerilogStudio::CmdParse::FileNameStr() {
     return AllFileName;
 }
 
+/**********************************************/
 std::string VerilogStudio::CmdParse::GetENV() {
     string VeribleENV;
     VeribleENV = getenv("VERIBLE_HOME");
     return VeribleENV;
 }
 
+/**********************************************/
 std::string VerilogStudio::CmdParse::CreateVerilogJson() {
     string temp = GetENV();
-    temp += "/verible-verilog-syntax --printtree " + AllFileName + " --export_json > temp.json";
+    //string temp = "/home/liuxi/verible/verible-v0.0-2277-g8ab3c7e3/bin";
+    temp += "/verible-verilog-syntax --printtree l" + AllFileName + " --export_json > temp.json";
     system(temp.c_str());
     temp = GetJsonPath();
     temp = temp.substr(0, temp.size() - 1) + "/temp.json";
     return temp;
 }
 
+/**********************************************/
 std::string VerilogStudio::CmdParse::GetJsonPath() {
     FILE *fp = nullptr;
     char PwdBuf[100] = {0};
@@ -143,6 +150,7 @@ std::string VerilogStudio::CmdParse::GetJsonPath() {
     return PwdBuf;
 }
 
+/**********************************************/
 vector<string> VerilogStudio::CmdParse::split(const string &str, const string &delims) {
     std::vector<std::string> output;
     auto first = str.cbegin();
@@ -160,6 +168,7 @@ vector<string> VerilogStudio::CmdParse::split(const string &str, const string &d
     return output;
 }
 
+/**********************************************/
 string &VerilogStudio::CmdParse::Trim(string &str) {
 
     if (str.empty()) {
@@ -170,3 +179,54 @@ string &VerilogStudio::CmdParse::Trim(string &str) {
     str.erase(str.find_last_not_of(" ") + 1);
     return str;
 }
+
+/**********************************************/
+void VerilogStudio::CmdParse::AddLine(string &connectRule) {
+    vector<string> tempPath = split(connectRule, "=>");
+    //tempPath[1] = Trim(tempPath[1]);
+    vector<string> path1 = split(tempPath[0], ".");
+    vector<string> path2 = split(tempPath[1], ".");
+    string leftPortName = path1.back();
+    string rightPortName = path2.back();
+    string PortName = leftPortName;
+
+    if(rightPortName.find("input") != string::npos || rightPortName.find("output") != string::npos ||rightPortName.find("inout") != string::npos){
+        path2.pop_back();
+    }else{
+        //rightPortName.clear();
+        rightPortName = "No";
+    };
+    path1.pop_back();
+    vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
+    string FlipModule = pHierarchy->GetFlipModule();
+    string lastModuleName = InstModuleNamePath.back();
+    string getTopModuleFile = pParse->GetSourceFileName(TopModuleName);
+    pChangeLine->GetTopModuleName(getTopModuleFile);
+
+//    pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
+    for (auto &it: InstModuleNamePath) {
+        string tempFileName = pParse->GetInstLocationFileName(it);
+        string tempSourceFileName = pParse->GetSourceFileName(it);
+        string tempPortEnd = pParse->GetPortEnd(it);
+        string tempSrcModule = pParse->GetSourceModuleName(it);
+        int tempBracketsLocation = pParse->GetBracketsLocation(it);
+        int tempEndBracketsLocation = pParse->GetEndBracketsLocation(it);
+        string tempInstFileName = pParse->GetInstLocationFileName(it);
+        if(it == TopModuleName){
+            pChangeLine->AddToTopModule(tempSourceFileName,PortName,tempPortEnd,tempBracketsLocation,tempEndBracketsLocation);
+        }else{
+            if (it == FlipModule) {
+                if(rightPortName=="No"){
+                    PortName = pChangeLine->FlipPort(leftPortName);
+                }else{
+                    PortName = rightPortName;
+                }
+            }
+            pChangeLine->AddPort(tempSourceFileName,PortName,tempPortEnd,tempSrcModule,tempBracketsLocation,tempEndBracketsLocation);
+            pChangeLine->AddInstPort(tempInstFileName,PortName,it);
+        }
+
+    }
+}
+
+

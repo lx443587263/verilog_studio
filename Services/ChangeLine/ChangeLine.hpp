@@ -11,6 +11,7 @@
 #include <regex>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 #include "../../IService.hpp"
 
 namespace VerilogStudio {
@@ -19,6 +20,7 @@ namespace VerilogStudio {
 
     /*******************class**********************/
     class ChangeLine : public IService {
+        /**********************************************/
     public:
         ChangeLine() {}
 
@@ -26,11 +28,11 @@ namespace VerilogStudio {
 
         void OpenFile(string &fileName);
 
-        void RegexReplace(string &srcStr, string &desStr);
+        void AddPort(string &fileName,string &PortName,string& portEnd,string& sourceModule,int bracketsLocation, int endBracketsLocation);
 
-        void AddPort(string &fileName,string &PortName,string& portEnd,string& sourceModule);
+        void AddInstPort(string& fileName,string &PortName,string &instModuleName);
 
-        void AddInstPort(string& fileName,string &PortName);
+        void AddToTopModule(string& fileName,string& PortName,string& portEnd,int bracketsLocation,int endBracketsLocation);
 
         void RemoveTopModule(string &TopModuleName, vector<string> &Vec);
 
@@ -38,9 +40,12 @@ namespace VerilogStudio {
 
         string FlipPort(string &PortName);
 
+        void GetTopModuleName(string& TopModuleName);
+
     /********************************************/
     private:
-        string FileContent;
+        string              FileContent;
+        string              TopModuleFileName;
     };
 }
 

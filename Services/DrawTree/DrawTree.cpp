@@ -5,7 +5,7 @@
 #include "DrawTree.hpp"
 
 
-
+/**********************************************/
 string VerilogStudio::DrawTree::get_node_name(string& root_str,string &leaf_str) {
     if(leaf_str.empty()){
         __node_name = root_str;
@@ -15,6 +15,7 @@ string VerilogStudio::DrawTree::get_node_name(string& root_str,string &leaf_str)
     return __node_name;
 }
 
+/**********************************************/
 Agnode_t *VerilogStudio::DrawTree::__draw_rb_node(Agraph_t *g, Agnode_t *_parent, char *name, char *label) {
     Agnode_t* _node = agnode(g,name,1);
     if(label != nullptr){
@@ -36,6 +37,7 @@ Agnode_t *VerilogStudio::DrawTree::__draw_rb_node(Agraph_t *g, Agnode_t *_parent
     return _node;
 }
 
+/**********************************************/
 void VerilogStudio::DrawTree::__draw_rb(Agraph_t *g, Agnode_t *_parent, VerilogStudio::htree_node<string> *parent_node, VerilogStudio::htree_node<string> *_node) {
     if(_node != nullptr){
         // 当前结点不是叶结点
@@ -71,6 +73,7 @@ void VerilogStudio::DrawTree::__draw_rb(Agraph_t *g, Agnode_t *_parent, VerilogS
     }*/
 }
 
+/**********************************************/
 void VerilogStudio::DrawTree::draw_rb(VerilogStudio::htree_node<string> *root,string filename) {
     // 1 创建上下文，存储graph和渲染方法等
     GVC_t * gvc = gvContext();

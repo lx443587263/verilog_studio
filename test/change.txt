@@ -1,2 +1,1 @@
-counter10.u_addr01.test_101.input[0:7]test=>counter10.u_full_adder1
-
+counter10.u_addr01.test_101.input in_asd=>counter10.u_full_adder1.output out_asd

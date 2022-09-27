@@ -21,6 +21,7 @@ namespace VerilogStudio{
 
     /*******************class**********************/
     class Module {
+        /**********************************************/
     public:
         /********************************************/
         Module() {}
@@ -50,6 +51,12 @@ namespace VerilogStudio{
 
         void AddPortEnd(string portEnd);
 
+        void AddBracketsLocation(int location);
+
+        void AddEndBracketsLocation(int loaction);
+
+        void AddPortActualLocation(int location);
+
         /*********************************************
         *******************get element****************
         **********************************************/
@@ -63,7 +70,13 @@ namespace VerilogStudio{
 
         string GetPortEnd();
 
+        int GetBracketsLocation();
 
+        int GetEndBracketsLocation();
+
+        int GetPortActualLocation();
+
+    /**********************************************/
     private:
         vector<string>                          PortNameVec;
         unordered_multimap<string, string>      IncludeModuleNameUnMap;
@@ -76,6 +89,9 @@ namespace VerilogStudio{
         unordered_map<string, vector<string>>   ModuleNameGuid;
         vector<string>                          ModuleNameVec;
         string                                  PortEnd;
+        int                                     BracketsLocation;
+        int                                     EndBracketsLocation;
+        int                                     PortActualLocation;
     };
 }
 

@@ -51,7 +51,6 @@ namespace VerilogStudio{
 
         ~Parse() {}
 
-
         /*********************************************
         ****************parse verilog*****************
         **********************************************/
@@ -92,6 +91,8 @@ namespace VerilogStudio{
 
         string generate_hex(const unsigned int len);
 
+        string FindGuid(string& ModuleName);
+
         /*********************************************
         ****************parse verilog*****************
         **********************************************/
@@ -106,6 +107,10 @@ namespace VerilogStudio{
         string GetPortEnd(string& ModuleName);
 
         string GetSourceModuleName(string& InstModuleName);
+
+        int GetBracketsLocation(string &ModuleName);
+
+        int GetEndBracketsLocation(string &ModuleName);
 
 
         /********************************************/

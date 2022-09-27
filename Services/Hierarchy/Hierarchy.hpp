@@ -23,6 +23,7 @@ namespace VerilogStudio {
 
     /*******************class**********************/
     class Hierarchy : public IService {
+        /**********************************************/
     public:
         /********************************************/
         Hierarchy() {}

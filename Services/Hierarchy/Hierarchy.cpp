@@ -4,7 +4,7 @@
 
 #include "Hierarchy.hpp"
 
-
+/**********************************************/
 VerilogStudio::htree<string>
 VerilogStudio::Hierarchy::CreateTree(string &TopName, shared_ptr<Parse> &pPar) {
     pParse = pPar;
@@ -35,6 +35,7 @@ VerilogStudio::Hierarchy::CreateTree(string &TopName, shared_ptr<Parse> &pPar) {
 //    recursive(tempiter,*tempnode);
 //}
 
+/**********************************************/
 VerilogStudio::htree_node<string> *
 VerilogStudio::Hierarchy::make_node(const string &ModuleName,const unordered_map<string,string>& KVModuleNameMap,const unordered_map<string, string>& IncludeModuleNameUnMap) {
     node_type *node = new node_type;
@@ -47,6 +48,7 @@ VerilogStudio::Hierarchy::make_node(const string &ModuleName,const unordered_map
     return node;
 }
 
+/**********************************************/
 VerilogStudio::htree_node<string> *VerilogStudio::Hierarchy::make_root(const string &ModuleName, const unordered_map<string, string> &IncludeModuleNameUnMap) {
     node_type *root = new node_type;
     root->ModuleName = ModuleName;
@@ -54,7 +56,7 @@ VerilogStudio::htree_node<string> *VerilogStudio::Hierarchy::make_root(const str
     return root;
 }
 
-
+/**********************************************/
 void VerilogStudio::Hierarchy::ShowTree(VerilogStudio::htree<string> &tr) {
     map<int, vector<string>> MapVec;
     MapVec = tr.levelOrder(tr.root);
@@ -67,7 +69,7 @@ void VerilogStudio::Hierarchy::ShowTree(VerilogStudio::htree<string> &tr) {
     }
 }
 
-
+/**********************************************/
 vector<string> VerilogStudio::Hierarchy::DeepFirstSearch(VerilogStudio::htree_node<string> &Root, string &ModuleName, vector<string> &Path) {
      Path.emplace_back(Root.ModuleName);
     if (Root.ModuleName == ModuleName) {
@@ -90,6 +92,7 @@ vector<string> VerilogStudio::Hierarchy::DeepFirstSearch(VerilogStudio::htree_no
     return vector<string>();
 }
 
+/**********************************************/
 void VerilogStudio::Hierarchy::GetShortestPath(VerilogStudio::htree_node<string> &Root, string &start, string &end) {
     vector<string> path1 = DeepFirstSearch(Root, start, tempPath1);
     vector<string> path2 = DeepFirstSearch(Root, end, tempPath2);
@@ -130,7 +133,9 @@ void VerilogStudio::Hierarchy::GetShortestPath(VerilogStudio::htree_node<string>
     }
 }
 
+/**********************************************/
 vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<string> path2) {
+    resPath.clear();
     for(auto i = path1.rbegin();i!=path1.rend();++i){
         for(auto j = path2.begin();j!=path2.end();++j){
              if((*i)==(*j)){
@@ -148,6 +153,7 @@ vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<
     return resPath;
 }
 
+/**********************************************/
 string VerilogStudio::Hierarchy::GetFlipModule() {
     return FlipModule;
 }
