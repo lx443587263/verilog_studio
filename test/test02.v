@@ -3,7 +3,7 @@ module counter10#(
     parameter APB_ADDR_WIDTH  = 8,
     parameter APB_DATA_WIDTH  = 8
     )(
-
+    wire combo_dbg_out;
     input       wire        rstn,
     input       wire        clk,
     output      wire[3:0]   cnt,
@@ -12,17 +12,6 @@ module counter10#(
     input       wire        f,
     output reg [3:0]               cnt_temp
 );
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-    wire asd;
-
-
     always@(posedge clk or negedge rstn) begin
         if(! rstn)begin
             cnt_temp        <= 4'b0 ;
@@ -36,15 +25,8 @@ module counter10#(
     end
 
     adder u_addr01(
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
-        .in_asd( asd),
+        .combo_dbg_out( combo_dbg_out),
+
         .clk(clk),
         .rst_n(rstn),
         .a(a),
@@ -52,15 +34,8 @@ module counter10#(
     );
 
     full_adder1 u_full_adder1(
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
-        .out_asd( asd),
+        .combo_dbg_out( combo_dbg_out),
+
         .f(Ai)
     );
 

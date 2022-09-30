@@ -49,6 +49,8 @@ namespace VerilogStudio {
 
         string GetFlipModule();
 
+        string GetVirTopModule();
+
         /*********************************************
         *******************create tree****************
         **********************************************/
@@ -68,6 +70,7 @@ namespace VerilogStudio {
         vector<string>                  tempPath2;
         vector<string>                  resPath;
         string                          FlipModule;
+        string                          virTopModule;
         bool flag               =       true;
     };
 

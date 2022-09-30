@@ -149,6 +149,8 @@ vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<
     FlipModule = path2.at(1);
     resPath.insert(resPath.end(),tempPath1.begin(),tempPath1.end());
     resPath.insert(resPath.end(),path2.begin(),path2.end());
+    if(!path2.empty())
+        virTopModule = path2[0];
 
     return resPath;
 }
@@ -156,6 +158,10 @@ vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<
 /**********************************************/
 string VerilogStudio::Hierarchy::GetFlipModule() {
     return FlipModule;
+}
+
+string VerilogStudio::Hierarchy::GetVirTopModule() {
+    return virTopModule;
 }
 
 

@@ -1,13 +1,5 @@
-module adder( in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in_asd,clk, rst_n, a, b, c);
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
-    input in_asd;
+module adder(clk, rst_n, a, b, c);
+    output combo_dbg_out;
     input [3:0] a;
 	input [3:0] b;
 	output [7:0] c;
@@ -29,15 +21,8 @@ module adder( in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in_asd, in
 	);
 
     counter110 test_101(
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
-        .in_asd( in_asd),
+        .combo_dbg_out( combo_dbg_out),
+
         .rstn11(rstn1),
         .clk1(clk1),
         .cnt1(cnt1),

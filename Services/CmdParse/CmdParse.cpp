@@ -11,7 +11,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
     pDraw = DrawTree::makeB_OBJ<DrawTree>();
     pChangeLine = ChangeLine::makeB_OBJ<ChangeLine>();
-    cmdparse->footer("version:v1.2");
+    cmdparse->footer("version:v2.1.3");
     cmdparse->add("inter", 'a', "command interaction");
     cmdparse->add<string>("input", 'i', "input filename. example: [-i] <filename>", false, "");
     cmdparse->add<string>("filelist", 'l', "input filelist. example: [-l] <filelist>", false, "");
@@ -29,12 +29,12 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     }
     if (cmdparse->exist("input")) {
 
-        //FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
-//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
-//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test04.v",
-//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test05.v",
-//                       "/Users/liuxi/CLionProjects/verilog_studio/test/test06.v"};
-        FileNameVec = {"testdefine.v"};
+        FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
+                       "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
+                       "/Users/liuxi/CLionProjects/verilog_studio/test/test04.v",
+                       "/Users/liuxi/CLionProjects/verilog_studio/test/test05.v",
+                       "/Users/liuxi/CLionProjects/verilog_studio/test/test06.v"};
+        //FileNameVec = {"testdefine.v"};
         ThreadPool pool(4);
         string JsonPath = cmdparse->get<string>("input");
         pParse->ReadJson(JsonPath);
@@ -46,7 +46,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         });
     }
     if (cmdparse->exist("filelist")) {
-        if(!FileNameVec.empty()){
+        if (!FileNameVec.empty()) {
             FileNameVec.clear();
         }
         ReadFileToVec(cmdparse->get<string>("filelist")).swap(FileNameVec);
@@ -61,15 +61,15 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         pParse->ReadJson(JsonPath);
 
 
-        if (cmdparse->exist("je")){
+        if (cmdparse->exist("je")) {
             ThreadPool pool(4);
             pool.enqueue([&]() {
                 for (auto &itr: FileNameVec) {
-                pParse->ParseVerilog(itr);
+                    pParse->ParseVerilog(itr);
                 }
             });
 
-        }else{
+        } else {
             for (auto &itr: FileNameVec) {
                 pParse->ParseVerilog(itr);
             }
@@ -87,7 +87,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         ReadFileToVec(cmdparse->get<string>("change")).swap(ChangeLineContent);
 
         for (auto &it: ChangeLineContent) {
-            if(it.empty()){
+            if (it.empty()) {
                 continue;
             }
             AddLine(it);
@@ -103,7 +103,7 @@ std::vector<std::string> VerilogStudio::CmdParse::ReadFileToVec(const std::strin
     if (!file.is_open())
         cout << "error" << endl;
     string s;
-    while (getline(file,s))
+    while (getline(file, s))
         temp.emplace_back(s);
     return temp;
 }
@@ -182,48 +182,68 @@ string &VerilogStudio::CmdParse::Trim(string &str) {
 
 /**********************************************/
 void VerilogStudio::CmdParse::AddLine(string &connectRule) {
+    auto tr = pHierarchy->CreateTree(TopModuleName, pParse);
+
+
     vector<string> tempPath = split(connectRule, "=>");
+    cout << "tempath[0]:" << tempPath[0] << endl;
+    cout << "tempath[1]:" << tempPath[1] << endl;
     //tempPath[1] = Trim(tempPath[1]);
     vector<string> path1 = split(tempPath[0], ".");
     vector<string> path2 = split(tempPath[1], ".");
     string leftPortName = path1.back();
+    cout << "leftPortName:"<<leftPortName <<endl;
     string rightPortName = path2.back();
+    cout << "rightPortName:"<<rightPortName<<endl;
     string PortName = leftPortName;
+    cout << "portName:" <<PortName<<endl;
 
-    if(rightPortName.find("input") != string::npos || rightPortName.find("output") != string::npos ||rightPortName.find("inout") != string::npos){
+    if (rightPortName.find("input") != string::npos || rightPortName.find("output") != string::npos || rightPortName.find("inout") != string::npos) {
         path2.pop_back();
-    }else{
+    } else {
         //rightPortName.clear();
         rightPortName = "No";
     };
     path1.pop_back();
     vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
     string FlipModule = pHierarchy->GetFlipModule();
+    cout << "FlipModule:" << FlipModule << endl;
     string lastModuleName = InstModuleNamePath.back();
-    string getTopModuleFile = pParse->GetSourceFileName(TopModuleName);
-    pChangeLine->GetTopModuleName(getTopModuleFile);
+    cout << "lastModuleName:" << lastModuleName << endl;
+    string virTopModule = pHierarchy->GetVirTopModule();
+    cout << "virTopModule:" << virTopModule << endl;
+    string getVirTopModuleFile = pParse->GetSourceFileName(virTopModule);
+    cout << "getVirTopModuleFile:" << getVirTopModuleFile << endl;
+    pChangeLine->GetTopModuleName(getVirTopModuleFile);
 
 //    pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
     for (auto &it: InstModuleNamePath) {
-        string tempFileName = pParse->GetInstLocationFileName(it);
+        cout << "InstModuleNamePath:" << it << endl;
+
         string tempSourceFileName = pParse->GetSourceFileName(it);
+        cout << "tempSourceFileName:" << tempSourceFileName << endl;
+
         string tempPortEnd = pParse->GetPortEnd(it);
+        cout << "tempPortEnd:" << tempPortEnd << endl;
         string tempSrcModule = pParse->GetSourceModuleName(it);
+        cout << "tempSrcModule:" << tempSrcModule << endl;
         int tempBracketsLocation = pParse->GetBracketsLocation(it);
+        cout << "tempBracketslocation:" << tempBracketsLocation << endl;
         int tempEndBracketsLocation = pParse->GetEndBracketsLocation(it);
         string tempInstFileName = pParse->GetInstLocationFileName(it);
-        if(it == TopModuleName){
-            pChangeLine->AddToTopModule(tempSourceFileName,PortName,tempPortEnd,tempBracketsLocation,tempEndBracketsLocation);
-        }else{
+        cout << "tempInstFileName:" << tempInstFileName << endl;
+        if (it == virTopModule) {
+            pChangeLine->AddToTopModule(tempSourceFileName, PortName, tempPortEnd, tempBracketsLocation, tempEndBracketsLocation);
+        } else {
             if (it == FlipModule) {
-                if(rightPortName=="No"){
+                if (rightPortName == "No") {
                     PortName = pChangeLine->FlipPort(leftPortName);
-                }else{
+                } else {
                     PortName = rightPortName;
                 }
             }
-            pChangeLine->AddPort(tempSourceFileName,PortName,tempPortEnd,tempSrcModule,tempBracketsLocation,tempEndBracketsLocation);
-            pChangeLine->AddInstPort(tempInstFileName,PortName,it);
+            pChangeLine->AddPort(tempSourceFileName, PortName, tempPortEnd, tempSrcModule, tempBracketsLocation, tempEndBracketsLocation);
+            pChangeLine->AddInstPort(tempInstFileName, PortName, it);
         }
 
     }

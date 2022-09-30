@@ -139,7 +139,6 @@ namespace VerilogStudio {
         }
 
         iterator insert(iterator &position, tree_node *node) {
-
             position._node->children.push_back(node);
             node->parent = position._node;
             return iterator(node);

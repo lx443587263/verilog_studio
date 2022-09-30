@@ -113,6 +113,7 @@ namespace VerilogStudio{
         int GetEndBracketsLocation(string &ModuleName);
 
 
+
         /********************************************/
     private:
         Document                                    doc;

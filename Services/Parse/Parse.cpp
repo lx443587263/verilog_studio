@@ -294,13 +294,9 @@ void VerilogStudio::Parse::ParseVerilog(string &FileName) {
         }
     }
     KVFileModule[FileGuid] = ModuleNames;
-    cout << "KVFileModule" << endl;
     if(!ModuleNames.empty()){
-        cout << "pModuele is NUll" <<endl;
         GetKVFileInstModule(FileGuid);
-        cout << "GetKVFileInstModule" << endl;
         GetKVInstModule();
-        cout << "ModuleNames" << endl;
     }
     ModuleNames.clear();
 }
@@ -371,7 +367,7 @@ void VerilogStudio::Parse::GetModuleName(Value::MemberIterator &ModuleNameItr) {
         if (mHeader->IsObject()) {
             for (auto moduleName = mHeader->GetObject().MemberBegin(); moduleName != mHeader->GetObject().MemberEnd(); ++moduleName) {
                 if (moduleName->value.IsString() && moduleName->value == "SymbolIdentifier" && (moduleName + 1)->name == "text") {
-                    //cout << (moduleName + 1)->value.GetString() << endl;
+                    cout << (moduleName + 1)->value.GetString() << endl;
                     pModule->AddModuleName(guid, (moduleName + 1)->value.GetString());
                     KVModuleGuid[guid] = (moduleName + 1)->value.GetString();
                     ModuleNames.emplace_back((moduleName + 1)->value.GetString());
@@ -452,7 +448,8 @@ void VerilogStudio::Parse::GetPortName(Value::MemberIterator &PortNameItr) {
                         }
                     }
                 }
-                if (portDecList->value == "(" && (portDecList - 1)->value.IsInt()) {
+                else if (portDecList->value == "(" && (portDecList - 1)->value.IsInt()) {
+                    cout <<(portDecList - 1)->value.GetInt() <<endl;
                     pModule->AddBracketsLocation((portDecList - 1)->value.GetInt());
                 }
 
@@ -609,7 +606,7 @@ void VerilogStudio::Parse::GetInstPort(Value::MemberIterator &InstPortItr) {
                         }
                     }
                 }
-                if ((itr9 + 1)->value == "(" && itr9->value.IsInt()) {
+                else if ((itr9 + 1)->value == "(" && itr9->value.IsInt()) {
                     pModule->AddPortActualLocation(itr9->value.GetInt());
                 }
             }
@@ -827,15 +824,11 @@ std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleNam
 
 /**********************************************/
 void VerilogStudio::Parse::GetKVFileInstModule(string &fileGuid) {
-    cout << "in KVFileInstModule()" <<endl;
     if(!pModule->GetIncludeModuleNameMap().empty()){
-        cout << "IncludeModuleNameMap() is not empty()" <<endl;
         vector<string> tempVec;
         for (auto &it: pModule->GetIncludeModuleNameMap()) {
-            cout << it.first << endl;
             tempVec.emplace_back(it.first);
         }
-        cout << tempVec.size() <<endl;
         KVFileInstModule[fileGuid] = tempVec;
     }else{
         return;
@@ -856,10 +849,11 @@ std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
 
     for (auto &it: KVFileModule) {
         auto ss = find_if(it.second.begin(), it.second.end(), [&temp](string &modulename) {
-            return modulename == temp;
+            return temp == modulename;
         });
         if (ss != it.second.end()) {
             temp = it.first;
+            cout << "file name guid:" <<it.first<<endl;
             break;
         }
     }
@@ -876,9 +870,7 @@ std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
 /**********************************************/
 void VerilogStudio::Parse::GetKVInstModule() {
     if (!pModule->GetIncludeModuleNameMap().empty()) {
-        cout << "in GetKVInstModule()"<<endl;
         for (auto &it: pModule->GetIncludeModuleNameMap()) {
-            cout << it.first<<":"<<it.second <<endl;
             KVInstModule[it.first] = it.second;
         }
     }
@@ -891,12 +883,15 @@ std::string VerilogStudio::Parse::GetPortEnd(std::string &ModuleName) {
 
 /**********************************************/
 std::string VerilogStudio::Parse::GetSourceModuleName(std::string &InstModuleName) {
+
     auto search = KVInstModule.find(InstModuleName);
     if (search != KVInstModule.end()) {
         return KVInstModule[InstModuleName];
     } else {
         return InstModuleName;
     }
+
+    return 0;
 }
 
 /**********************************************/
@@ -932,6 +927,7 @@ std::string VerilogStudio::Parse::FindGuid(std::string &ModuleName) {
     }
     return temp;
 }
+
 
 
 
