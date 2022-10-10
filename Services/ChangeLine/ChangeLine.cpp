@@ -115,7 +115,6 @@ void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &
         if(FileContent.find("(",FileContent.find(instModuleName))!=string::npos)
             pos = FileContent.find("(",FileContent.find(instModuleName));
     }
-    cout <<"pos:"<<pos<<endl;
     //cout <<"AddInstPort:"<<FileContent.substr(pos,pos+20)<<endl;
     //FileContent.insert(pos+1,"\n        "+tempPortName);
     WriteFile(fileName);

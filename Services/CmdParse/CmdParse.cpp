@@ -11,7 +11,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
     pDraw = DrawTree::makeB_OBJ<DrawTree>();
     pChangeLine = ChangeLine::makeB_OBJ<ChangeLine>();
-    cmdparse->footer("version:v2.1.3");
+    cmdparse->footer("version:v2.1.7 2022-10-09");
     cmdparse->add("inter", 'a', "command interaction");
     cmdparse->add<string>("input", 'i', "input filename. example: [-i] <filename>", false, "");
     cmdparse->add<string>("filelist", 'l', "input filelist. example: [-l] <filelist>", false, "");
@@ -205,12 +205,24 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
         rightPortName = "No";
     };
     path1.pop_back();
+    htree<string>::iterator iter(tr.root);
+    cout <<"tree node"<<tr.root->ModuleName<<endl;
+    for(auto &it:path1){
+        pParse->GetSrcModuleName(iter,it,path1.back());
+    }
+    iter=tr.root;
+    for(auto &it:path2){
+        pParse->GetSrcModuleName(iter,it,path2.back());
+    }
+
     vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
     string FlipModule = pHierarchy->GetFlipModule();
     cout << "FlipModule:" << FlipModule << endl;
     string lastModuleName = InstModuleNamePath.back();
     cout << "lastModuleName:" << lastModuleName << endl;
     string virTopModule = pHierarchy->GetVirTopModule();
+    //pParse->GetKVInstModule(InstModuleNamePath,virTopModule);
+    pParse->ShowKvInstModule();
     cout << "virTopModule:" << virTopModule << endl;
     string getVirTopModuleFile = pParse->GetSourceFileName(virTopModule);
     cout << "getVirTopModuleFile:" << getVirTopModuleFile << endl;
@@ -247,6 +259,7 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
         }
 
     }
+
 }
 
 

@@ -22,6 +22,7 @@
 #include "../../rapidjson/filereadstream.h"
 #include "../../rapidjson/stringbuffer.h"
 #include "../../IService.hpp"
+#include "../../Common/Supporting/Tree.hpp"
 
 
 namespace VerilogStudio{
@@ -82,7 +83,7 @@ namespace VerilogStudio{
 
         void GetKVFileInstModule(string& fileGuid);
 
-        void GetKVInstModule();
+        void GetAllInstModule();
 
         /*********************************************
         ****************create guid*******************
@@ -112,6 +113,12 @@ namespace VerilogStudio{
 
         int GetEndBracketsLocation(string &ModuleName);
 
+        void GetKVInstModule(vector<string>& modulePath, string& virModuleName);
+
+        void ShowKvInstModule();
+
+        void GetSrcModuleName(htree<string>::iterator& iter,std::string& moduleName,std::string& lastModuleName);
+
 
 
         /********************************************/
@@ -129,6 +136,7 @@ namespace VerilogStudio{
         unordered_map<string, vector<string>>       KVFileInstModule;
         unordered_map<string, string>               KVModuleGuid;
         unordered_map<string, string>               KVInstModule;
+        unordered_multimap<string,string>           AllInstModule;
     };
 
 }
