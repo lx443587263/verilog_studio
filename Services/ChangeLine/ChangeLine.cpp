@@ -43,7 +43,7 @@ void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortN
         tempPortName = PortName.substr(tempPos + 5);
     }
     if(portEnd == ";"){
-        //FileContent.insert(static_cast<string::size_type>(bracketsLocation+1),tempPortName + ",");
+        FileContent.insert(static_cast<string::size_type>(bracketsLocation+1),tempPortName + ",");
         modulePos = endBracketsLocation;
     }
 
@@ -56,7 +56,7 @@ void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortN
     }else{
         pos = FileContent.find("input",modulePos);
     }
-    //FileContent.insert(pos,PortName + portEnd+"\n    ");
+    FileContent.insert(pos,PortName + portEnd+"\n    ");
     //cout <<"AddPort:"<<FileContent.substr(pos,pos+20)<<endl;
     WriteFile(fileName);
 }
@@ -116,7 +116,7 @@ void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &
             pos = FileContent.find("(",FileContent.find(instModuleName));
     }
     //cout <<"AddInstPort:"<<FileContent.substr(pos,pos+20)<<endl;
-    //FileContent.insert(pos+1,"\n        "+tempPortName);
+    FileContent.insert(pos+1,"\n        "+tempPortName);
     WriteFile(fileName);
 }
 
@@ -143,10 +143,10 @@ void VerilogStudio::ChangeLine::AddToTopModule(std::string& fileName,std::string
     }
 //    cout << "bracketsLocation:" <<FileContent.substr(bracketsLocation,bracketsLocation+20);
 //    cout << "endBracketsLocation:"<<FileContent.substr(endBracketsLocation,endBracketsLocation+20)<<endl;
-//    if (portEnd == ";") {
-//        FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), PortName + ",\n    ");
-//    }
-    //FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), "\n    "+PortName + ";");
+    if (portEnd == ";") {
+        FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), PortName + ",\n    ");
+    }
+    FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), "\n    "+PortName + portEnd);
     WriteFile(fileName);
 }
 

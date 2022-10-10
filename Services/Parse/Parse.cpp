@@ -800,13 +800,14 @@ std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleNam
     string filename;
 
     for (auto &it: KVFileInstModule) {
-        auto ss = find_if(it.second.begin(), it.second.end(), [&ModuleName](string &modulename) {
-            return modulename == ModuleName;
-        });
-        if (ss != it.second.end()) {
+        auto ss = it.second.find(ModuleName);
+//        auto ss = find_if(it.second.begin(), it.second.end(), [&ModuleName](string &modulename) {
+//            return modulename == ModuleName;
+//        });
+        if (ss != it.second.end() && ss->second==KVInstModule[ModuleName]) {
             temp = it.first;
+            break;
         }
-
 //        for(i = 0;i<it.second.size();++i){
 //            if(it.second[i] == ModuleName){
 //                temp = it.first;
@@ -825,11 +826,11 @@ std::string VerilogStudio::Parse::GetInstLocationFileName(std::string &ModuleNam
 /**********************************************/
 void VerilogStudio::Parse::GetKVFileInstModule(string &fileGuid) {
     if(!pModule->GetIncludeModuleNameMap().empty()){
-        vector<string> tempVec;
-        for (auto &it: pModule->GetIncludeModuleNameMap()) {
-            tempVec.emplace_back(it.first);
-        }
-        KVFileInstModule[fileGuid] = tempVec;
+//        unordered_map<string,string> tempVec;
+//        for (auto &it: pModule->GetIncludeModuleNameMap()) {
+//            tempVec.emplace_back(it.first);
+//        }
+        KVFileInstModule[fileGuid] = pModule->GetIncludeModuleNameMap();
     }else{
         return;
     }
@@ -927,76 +928,7 @@ std::string VerilogStudio::Parse::FindGuid(std::string &ModuleName) {
     return temp;
 }
 
-//void VerilogStudio::Parse::GetKVInstModule(std::vector<std::string>& modulePath, std::string& virModuleName) {
-//    string temp;
-//    int location;
-//    for(int k = 0 ;k<modulePath.size();++k){
-//        cout <<"modulePath:"<<modulePath[k]<<endl;
-//        if(modulePath[k]==virModuleName)
-//            location = k;
-//    }
-//
-//    for(auto &it:AllInstModule){
-//        cout << "allInstModule:"<<it.first<<":"<<it.second<<endl;
-//    }
-//
-//    for(int i = location;i>=0;--i){
-//        int j=i;
-//        if(j<0)
-//            break;
-//        if(!KVInstModule[modulePath[j]].empty()){
-//            auto searchGuid = KVModuleGuid.find(KVInstModule[modulePath[j]]);
-//            if(searchGuid!=KVModuleGuid.end()){
-//                temp = searchGuid->first;
-//            }
-//        }
-//
-//        for(auto itr=AllInstModule.begin();itr!=AllInstModule.end();++itr){
-//            if(modulePath[i]==itr->first){
-//                cout << "allInstModule first:"<<itr->first<<":"<<itr->second<<endl;
-//                auto search = KVInstModule.find(itr->first);
-//                if(search!=KVInstModule.end() && !search->second.empty()){
-//                    if(!temp.empty()){
-//                        auto tempSearch = ModuleGuid[temp]->GetIncludeModuleName().find(itr->second);
-//                        if(tempSearch!=ModuleGuid[temp]->GetIncludeModuleName().end()){
-//                            KVInstModule[itr->first] = itr->second;
-//                        }
-//                    }
-//                }else{
-//                    KVInstModule[itr->first] = itr->second;
-//                }
-//            }
-//        }
-//        --j;
-//    }
-//
-////    for(int h = modulePath.size()-1;h>=location;--h){
-////        int j = h-1;
-////        if(j<location)
-////            break;
-////        auto searchGuid = KVModuleGuid.find(modulePath[j]);
-////        if(searchGuid!=KVModuleGuid.end()){
-////            temp = searchGuid->first;
-////        }
-////        for(auto itr=AllInstModule.begin();itr!=AllInstModule.end();++itr){
-////            if(modulePath[h]==itr->first){
-////                cout << "allInstModule last:"<<itr->first<<":"<<itr->second<<endl;
-////                auto search = KVInstModule.find(itr->first);
-////                if(search!=KVInstModule.end()){
-////                    auto tempSearch = ModuleGuid[temp]->GetIncludeModuleName().find(itr->second);
-////                    if(tempSearch!=ModuleGuid[temp]->GetIncludeModuleName().end()){
-////                        KVInstModule[itr->first] = itr->second;
-////                    }
-////                }else{
-////                    KVInstModule[itr->first] = itr->second;
-////                }
-////            }
-////        }
-////    }
-//
-//
-//}
-
+/**********************************************/
 void VerilogStudio::Parse::ShowKvInstModule() {
     cout << "in ShowKvInstModule" <<endl;
     for(auto& it: KVInstModule){
@@ -1004,11 +936,9 @@ void VerilogStudio::Parse::ShowKvInstModule() {
     }
 }
 
+/**********************************************/
 void VerilogStudio::Parse::GetSrcModuleName(VerilogStudio::htree<std::string>::iterator &iter, std::string& moduleName,std::string& lastModuleName) {
-    cout << "moduleName:"<<moduleName <<"====="<<"lastModuleName:"<<lastModuleName<<endl;
-    cout << "iter._node->ModuleName:" <<iter._node->ModuleName <<endl;
     if(iter._node->ModuleName == lastModuleName){
-        cout <<"iter._node->ModuleName:" <<iter._node->ModuleName <<endl;
         if(iter._node->KVInstModule.empty()){
             KVInstModule[iter._node->ModuleName];
         }else{
@@ -1022,15 +952,12 @@ void VerilogStudio::Parse::GetSrcModuleName(VerilogStudio::htree<std::string>::i
             KVInstModule[iter._node->ModuleName];
         }else{
             for(auto& itr2:iter._node->KVInstModule){
-                cout << "GetSrcModuleName"<<itr2.first<<"->"<<itr2.second<<endl;
                 KVInstModule[itr2.first] = itr2.second;
             }
         }
     }else{
         for(auto& itr3:iter._node->children){
-            cout <<"iter._node->children:"<< itr3->ModuleName<<endl;
             if(itr3->ModuleName==moduleName){
-                cout <<"itr3->ModuleName:"<<itr3->ModuleName<<endl;
                 iter = itr3;
                 GetSrcModuleName(iter,moduleName,lastModuleName);
             }

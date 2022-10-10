@@ -1,4 +1,4 @@
-module adder(clk, rst_n, a, b, c);
+module adder( combo_dbg_out,clk, rst_n, a, b, c);
     output combo_dbg_out;
     input [3:0] a;
 	input [3:0] b;

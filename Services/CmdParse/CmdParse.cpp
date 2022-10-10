@@ -11,7 +11,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
     pDraw = DrawTree::makeB_OBJ<DrawTree>();
     pChangeLine = ChangeLine::makeB_OBJ<ChangeLine>();
-    cmdparse->footer("version:v2.1.7 2022-10-09");
+    cmdparse->footer("version:v2.3 release");
     cmdparse->add("inter", 'a', "command interaction");
     cmdparse->add<string>("input", 'i', "input filename. example: [-i] <filename>", false, "");
     cmdparse->add<string>("filelist", 'l', "input filelist. example: [-l] <filelist>", false, "");
@@ -28,7 +28,6 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         TopModuleName = cmdparse->get<string>("top");
     }
     if (cmdparse->exist("input")) {
-
         FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
                        "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
                        "/Users/liuxi/CLionProjects/verilog_studio/test/test04.v",
@@ -62,13 +61,12 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
 
 
         if (cmdparse->exist("je")) {
-            ThreadPool pool(4);
+            ThreadPool pool(24);
             pool.enqueue([&]() {
                 for (auto &itr: FileNameVec) {
                     pParse->ParseVerilog(itr);
                 }
             });
-
         } else {
             for (auto &itr: FileNameVec) {
                 pParse->ParseVerilog(itr);
@@ -85,7 +83,6 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     if (cmdparse->exist("change")) {
         //change line file
         ReadFileToVec(cmdparse->get<string>("change")).swap(ChangeLineContent);
-
         for (auto &it: ChangeLineContent) {
             if (it.empty()) {
                 continue;
@@ -183,8 +180,6 @@ string &VerilogStudio::CmdParse::Trim(string &str) {
 /**********************************************/
 void VerilogStudio::CmdParse::AddLine(string &connectRule) {
     auto tr = pHierarchy->CreateTree(TopModuleName, pParse);
-
-
     vector<string> tempPath = split(connectRule, "=>");
     cout << "tempath[0]:" << tempPath[0] << endl;
     cout << "tempath[1]:" << tempPath[1] << endl;
@@ -205,8 +200,10 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
         rightPortName = "No";
     };
     path1.pop_back();
+    if(tr.root->ModuleName.empty()){
+        cout << "tree is empty()"<<endl;
+    }
     htree<string>::iterator iter(tr.root);
-    cout <<"tree node"<<tr.root->ModuleName<<endl;
     for(auto &it:path1){
         pParse->GetSrcModuleName(iter,it,path1.back());
     }
@@ -214,7 +211,6 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
     for(auto &it:path2){
         pParse->GetSrcModuleName(iter,it,path2.back());
     }
-
     vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
     string FlipModule = pHierarchy->GetFlipModule();
     cout << "FlipModule:" << FlipModule << endl;
@@ -230,7 +226,7 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
 
 //    pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
     for (auto &it: InstModuleNamePath) {
-        cout << "InstModuleNamePath:" << it << endl;
+        cout << "\nInstModuleNamePath:" << it << endl;
 
         string tempSourceFileName = pParse->GetSourceFileName(it);
         cout << "tempSourceFileName:" << tempSourceFileName << endl;

@@ -113,8 +113,6 @@ namespace VerilogStudio{
 
         int GetEndBracketsLocation(string &ModuleName);
 
-        void GetKVInstModule(vector<string>& modulePath, string& virModuleName);
-
         void ShowKvInstModule();
 
         void GetSrcModuleName(htree<string>::iterator& iter,std::string& moduleName,std::string& lastModuleName);
@@ -123,20 +121,20 @@ namespace VerilogStudio{
 
         /********************************************/
     private:
-        Document                                    doc;
-        string                                      guid;
-        unordered_map<string, string>               FileNameGuid;
-        unordered_map<string,shared_ptr<Module>>    ModuleGuid;
-        shared_ptr<Module>                          pModule;
-        vector<string>                              UnInstModuleName;
-        vector<string>                              InstModuleName;
-        string                                      tempPortDec;
-        vector<string>                              ModuleNames;
-        unordered_map<string, vector<string>>       KVFileModule;
-        unordered_map<string, vector<string>>       KVFileInstModule;
-        unordered_map<string, string>               KVModuleGuid;
-        unordered_map<string, string>               KVInstModule;
-        unordered_multimap<string,string>           AllInstModule;
+        Document                                                doc;
+        string                                                  guid;
+        unordered_map<string, string>                           FileNameGuid;
+        unordered_map<string,shared_ptr<Module>>                ModuleGuid;
+        shared_ptr<Module>                                      pModule;
+        vector<string>                                          UnInstModuleName;
+        vector<string>                                          InstModuleName;
+        string                                                  tempPortDec;
+        vector<string>                                          ModuleNames;
+        unordered_map<string, vector<string>>                   KVFileModule;
+        unordered_map<string, unordered_map<string,string>>     KVFileInstModule;
+        unordered_map<string, string>                           KVModuleGuid;
+        unordered_map<string, string>                           KVInstModule;
+        unordered_multimap<string,string>                       AllInstModule;
     };
 
 }
