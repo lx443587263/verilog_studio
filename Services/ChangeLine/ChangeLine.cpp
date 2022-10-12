@@ -143,10 +143,11 @@ void VerilogStudio::ChangeLine::AddToTopModule(std::string& fileName,std::string
     }
 //    cout << "bracketsLocation:" <<FileContent.substr(bracketsLocation,bracketsLocation+20);
 //    cout << "endBracketsLocation:"<<FileContent.substr(endBracketsLocation,endBracketsLocation+20)<<endl;
-    if (portEnd == ";") {
-        FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), PortName + ",\n    ");
-    }
-    FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), "\n    "+PortName + portEnd);
+
+//    if (portEnd == ";") {
+//        FileContent.insert(static_cast<string::size_type>(bracketsLocation + 1), PortName + ",\n    ");
+//    }
+    FileContent.insert(static_cast<string::size_type>(endBracketsLocation + 1), "\n    "+PortName + ";\n");
     WriteFile(fileName);
 }
 

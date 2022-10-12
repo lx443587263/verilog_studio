@@ -3,7 +3,13 @@ module counter110#(
     parameter APB_ADDR_WIDTH  = 8,
     parameter APB_DATA_WIDTH  = 8
     )(
-    output combo_dbg_out,
+    output [1:0] combo_dbg_out,
+    wire [1:0] combo,
+    output combo_dbg,
+    wire [1:0] combo,
+    wire [1:0] combo,
+    wire [1:0] combo,
+    wire [1:0] combo,
     input       wire        rstn1,
     input       wire        clk1,
     output      wire[3:0]   cnt1,

@@ -45,7 +45,6 @@ std::string VerilogStudio::Parse::generate_hex(const unsigned int len) {
 
 /**********************************************/
 void VerilogStudio::Parse::ParseVerilog(string &FileName) {
-    cout << FileName << endl;
     string FileGuid = generate_hex(15);
     FileNameGuid[FileGuid] = FileName;
     if (doc.HasMember(FileName.c_str())) {
@@ -449,7 +448,7 @@ void VerilogStudio::Parse::GetPortName(Value::MemberIterator &PortNameItr) {
                     }
                 }
                 else if (portDecList->value == "(" && (portDecList - 1)->value.IsInt()) {
-                    cout <<(portDecList - 1)->value.GetInt() <<endl;
+                    //cout <<(portDecList - 1)->value.GetInt() <<endl;
                     pModule->AddBracketsLocation((portDecList - 1)->value.GetInt());
                 }
 

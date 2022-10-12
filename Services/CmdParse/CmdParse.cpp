@@ -2,6 +2,8 @@
 // Created by 狂飙的西红柿 on 2022/9/6.
 //
 #include "CmdParse.hpp"
+#include <chrono>
+#include <unistd.h>
 
 /**********************************************/
 void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
@@ -11,7 +13,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
     pDraw = DrawTree::makeB_OBJ<DrawTree>();
     pChangeLine = ChangeLine::makeB_OBJ<ChangeLine>();
-    cmdparse->footer("version:v2.3 release");
+    cmdparse->footer("version:v2.4");
     cmdparse->add("inter", 'a', "command interaction");
     cmdparse->add<string>("input", 'i', "input filename. example: [-i] <filename>", false, "");
     cmdparse->add<string>("filelist", 'l', "input filelist. example: [-l] <filelist>", false, "");
@@ -27,6 +29,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     if (cmdparse->exist("top")) {
         TopModuleName = cmdparse->get<string>("top");
     }
+
     if (cmdparse->exist("input")) {
         FileNameVec = {"/Users/liuxi/CLionProjects/verilog_studio/test/test02.v",
                        "/Users/liuxi/CLionProjects/verilog_studio/test/test03.v",
@@ -35,15 +38,23 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
                        "/Users/liuxi/CLionProjects/verilog_studio/test/test06.v"};
         //FileNameVec = {"testdefine.v"};
         ThreadPool pool(4);
+        auto start = chrono::steady_clock::now();
         string JsonPath = cmdparse->get<string>("input");
         pParse->ReadJson(JsonPath);
+        auto end = chrono::steady_clock::now();
+        cout << "ReadJson use time:"<<chrono::duration_cast<chrono::milliseconds>(end-start).count()<<endl;
 
+
+        start = chrono::steady_clock::now();
         pool.enqueue([&]() {
             for (auto &itr: FileNameVec) {
                 pParse->ParseVerilog(itr);
             }
         });
+        end = chrono::steady_clock::now();
+        cout << "ParseVerilog use time:"<<chrono::duration_cast<chrono::milliseconds>(end-start).count()<<endl;
     }
+
     if (cmdparse->exist("filelist")) {
         if (!FileNameVec.empty()) {
             FileNameVec.clear();
@@ -180,43 +191,66 @@ string &VerilogStudio::CmdParse::Trim(string &str) {
 /**********************************************/
 void VerilogStudio::CmdParse::AddLine(string &connectRule) {
     auto tr = pHierarchy->CreateTree(TopModuleName, pParse);
-    vector<string> tempPath = split(connectRule, "=>");
-    cout << "tempath[0]:" << tempPath[0] << endl;
-    cout << "tempath[1]:" << tempPath[1] << endl;
-    //tempPath[1] = Trim(tempPath[1]);
-    vector<string> path1 = split(tempPath[0], ".");
-    vector<string> path2 = split(tempPath[1], ".");
-    string leftPortName = path1.back();
-    cout << "leftPortName:"<<leftPortName <<endl;
-    string rightPortName = path2.back();
-    cout << "rightPortName:"<<rightPortName<<endl;
-    string PortName = leftPortName;
-    cout << "portName:" <<PortName<<endl;
-
-    if (rightPortName.find("input") != string::npos || rightPortName.find("output") != string::npos || rightPortName.find("inout") != string::npos) {
-        path2.pop_back();
-    } else {
-        //rightPortName.clear();
-        rightPortName = "No";
-    };
-    path1.pop_back();
-    if(tr.root->ModuleName.empty()){
-        cout << "tree is empty()"<<endl;
-    }
     htree<string>::iterator iter(tr.root);
-    for(auto &it:path1){
-        pParse->GetSrcModuleName(iter,it,path1.back());
+    vector<string> InstModuleNamePath;
+    string PortName,leftPortName,rightPortName,virTopModule;
+    if(connectRule.find("=>")!=string::npos){
+        vector<string> tempPath = split(connectRule, "=>");
+        //tempPath[1] = Trim(tempPath[1]);
+        vector<string> path1 = split(tempPath[0], ".");
+        vector<string> path2 = split(tempPath[1], ".");
+        leftPortName = path1.back();
+        rightPortName = path2.back();
+        PortName = leftPortName;
+
+        if (rightPortName.find("input") != string::npos || rightPortName.find("output") != string::npos || rightPortName.find("inout") != string::npos) {
+            path2.pop_back();
+        } else {
+            //rightPortName.clear();
+            rightPortName = "No";
+        };
+        path1.pop_back();
+        if(tr.root->ModuleName.empty()){
+            cout << "tree is empty()"<<endl;
+        }
+        for(auto &it:path1){
+            pParse->GetSrcModuleName(iter,it,path1.back());
+        }
+        iter=tr.root;
+        for(auto &it:path2){
+            pParse->GetSrcModuleName(iter,it,path2.back());
+        }
+        InstModuleNamePath = pHierarchy->MergePath(path1, path2);
+        virTopModule = pHierarchy->GetVirTopModule();
+
+        cout << "tempath[0]:" << tempPath[0] << endl;
+        cout << "tempath[1]:" << tempPath[1] << endl;
+        cout << "leftPortName:"<<leftPortName <<endl;
+        cout << "rightPortName:"<<rightPortName<<endl;
+        cout << "portName:" <<PortName<<endl;
+        cout << "portName:" <<PortName<<endl;
+
+    }else{
+        cout <<"root:"<<tr.root->ModuleName <<endl;
+        vector<string> path1 = split(connectRule, ".");
+        leftPortName = path1.back();
+        PortName = leftPortName;
+        rightPortName = leftPortName;
+        path1.pop_back();
+        if(tr.root->ModuleName.empty()){
+            cout << "tree is empty()"<<endl;
+        }
+        for(auto &it:path1){
+            pParse->GetSrcModuleName(iter,it,path1.back());
+        }
+        path1.swap(InstModuleNamePath);
+        virTopModule = InstModuleNamePath.at(0);
     }
-    iter=tr.root;
-    for(auto &it:path2){
-        pParse->GetSrcModuleName(iter,it,path2.back());
-    }
-    vector<string> InstModuleNamePath = pHierarchy->MergePath(path1, path2);
+
     string FlipModule = pHierarchy->GetFlipModule();
     cout << "FlipModule:" << FlipModule << endl;
     string lastModuleName = InstModuleNamePath.back();
     cout << "lastModuleName:" << lastModuleName << endl;
-    string virTopModule = pHierarchy->GetVirTopModule();
     //pParse->GetKVInstModule(InstModuleNamePath,virTopModule);
     pParse->ShowKvInstModule();
     cout << "virTopModule:" << virTopModule << endl;

@@ -1,6 +1,7 @@
 //单 bit 全加器，指定路径延迟
 module full_adder1(
-    input combo_dbg_out,
+    input combo_dbg,
+    input [1:0] combo_dbg_out,
     input   Ai, Bi, Ci,
     output  So, Co);
 

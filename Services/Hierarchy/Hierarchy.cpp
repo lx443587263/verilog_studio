@@ -62,7 +62,7 @@ void VerilogStudio::Hierarchy::ShowTree(VerilogStudio::htree<string> &tr) {
     MapVec = tr.levelOrder(tr.root);
 
     for (auto &it: MapVec) {
-        cout << it.first << endl;
+        //cout << it.first << endl;
         for (auto &it2: it.second) {
             cout << it2 << endl;
         }
@@ -146,9 +146,11 @@ vector<string> VerilogStudio::Hierarchy::MergePath(vector<string> path1, vector<
             }
         }
     }
+
     FlipModule = path2.at(1);
     resPath.insert(resPath.end(),tempPath1.begin(),tempPath1.end());
     resPath.insert(resPath.end(),path2.begin(),path2.end());
+
     if(!path2.empty())
         virTopModule = path2[0];
 
