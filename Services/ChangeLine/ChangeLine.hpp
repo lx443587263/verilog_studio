@@ -13,6 +13,8 @@
 #include <sstream>
 #include <iostream>
 #include "../../IService.hpp"
+#include "../../spdlog/spdlog.h"
+#include "../../spdlog/sinks/basic_file_sink.h"
 
 namespace VerilogStudio {
     /**********************************************/
@@ -44,8 +46,8 @@ namespace VerilogStudio {
 
     /********************************************/
     private:
-        string              FileContent;
-        string              TopModuleFileName;
+        string                              FileContent;
+        string                              TopModuleFileName;
     };
 }
 

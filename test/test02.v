@@ -12,26 +12,9 @@ module counter10#(
     output reg [3:0]    cnt_temp
     
 );
-
- 
+ a
     wire [1:0] combo;
-
-    wire [1:0] combo;
-
-    wire [1:0] combo;
-
-    wire [1:0] combo;
-
-    wire [1:0] combo;
-
-    wire [1:0] combo;
-
-    wire combo_dbg;
-
-    wire [1:0] combo;
-
-    wire [1:0] combo_dbg_out;
- always@(posedge clk or negedge rstn) begin
+lways@(posedge clk or negedge rstn) begin
         if(! rstn)begin
             cnt_temp        <= 4'b0 ;
         end
@@ -46,28 +29,6 @@ module counter10#(
     adder u_addr01(
         . combo( combo),
 
-        . combo( combo),
-
-        . combo( combo),
-
-        . combo( combo),
-
-        . combo( combo),
-
-        .combo_dbg( combo_dbg),
-
-        . combo( combo),
-
-        . combo_dbg_out( combo_dbg_out),
-
-        .combo_dbg( combo_dbg),
-
-        . combo( combo),
-
-        . combo_dbg_out( combo_dbg_out),
-
-        . combo_dbg_out( combo_dbg_out),
-
         .clk(clk),
         .rst_n(rstn),
         .a(a),
@@ -75,13 +36,7 @@ module counter10#(
     );
 
     full_adder1 u_full_adder1(
-        .combo_dbg( combo_dbg),
-
-        . combo_dbg_out( combo_dbg_out),
-
-        .combo_dbg( combo_dbg),
-
-        . combo_dbg_out( combo_dbg_out),
+        . combo( combo),
 
         .f(Ai)
     );

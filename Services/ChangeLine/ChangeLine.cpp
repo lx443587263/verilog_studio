@@ -24,7 +24,8 @@ void VerilogStudio::ChangeLine::WriteFile(std::string &fileName) {
 void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortName,std::string& portEnd,std::string& sourceModule,int bracketsLocation,int endBracketsLocation) {
     OpenFile(fileName);
     if(FileContent.size()<bracketsLocation){
-        cout << "error: add port out of range"<<endl;
+//        logger->error("function AddPort fadd port out of range.");
+        cerr << "error: add port out of range"<<endl;
     }
     string::size_type pos;
     string tempPortName;
@@ -47,16 +48,16 @@ void VerilogStudio::ChangeLine::AddPort(std::string &fileName,std::string& PortN
         modulePos = endBracketsLocation;
     }
 
-    if(PortName.find("input",modulePos)!= string::npos){
-        pos = FileContent.find("input",modulePos);
-    } else if(PortName.find("output",modulePos)!= string::npos){
-        pos = FileContent.find("output",modulePos);
-    }else if(PortName.find("inout",modulePos)!= string::npos){
-        pos = FileContent.find("inout",modulePos);
-    }else{
-        pos = FileContent.find("input",modulePos);
-    }
-    FileContent.insert(pos,PortName + portEnd+"\n    ");
+//    if(PortName.find("input",modulePos)!= string::npos){
+//        pos = FileContent.find("input",modulePos);
+//    } else if(PortName.find("output",modulePos)!= string::npos){
+//        pos = FileContent.find("output",modulePos);
+//    }else if(PortName.find("inout",modulePos)!= string::npos){
+//        pos = FileContent.find("inout",modulePos);
+//    }else{
+//        pos = FileContent.find("input",modulePos);
+//    }
+    FileContent.insert(static_cast<string::size_type>(bracketsLocation+1),PortName + portEnd+"\n    ");
     //cout <<"AddPort:"<<FileContent.substr(pos,pos+20)<<endl;
     WriteFile(fileName);
 }
@@ -85,8 +86,10 @@ std::string VerilogStudio::ChangeLine::FlipPort(std::string &PortName) {
 
 /**********************************************/
 void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &PortName,std::string &instModuleName) {
-    if(fileName.empty())
-        cout << "file name is empty." <<endl;
+    if(fileName.empty()){
+        cerr << "function AddInstPort file name is empty." <<endl;
+//        logger->error("function AddInstPort file name is empty.");
+    }
     string tempPortName;
     OpenFile(fileName);
     string::size_type pos;
@@ -122,11 +125,13 @@ void VerilogStudio::ChangeLine::AddInstPort(std::string &fileName, std::string &
 
 /**********************************************/
 void VerilogStudio::ChangeLine::AddToTopModule(std::string& fileName,std::string &PortName,std::string& portEnd,int bracketsLocation,int endBracketsLocation) {
-    if(fileName.empty())
-        cout << "file name is empty." <<endl;
+    if(fileName.empty()){
+//        logger->error("function AddToTopModule file name is empty.");
+    }
     OpenFile(fileName);
     if(FileContent.size()<bracketsLocation){
-        cout << "erroe:add top module out of range"<<endl;
+//        logger->error("function AddToTopModule add top module out of range.");
+        cerr<<"add top module out of range."<<endl;
     }
     if(PortName.find("input")!=string::npos){
         PortName.replace(PortName.find("input"), 5,"wire");
@@ -151,6 +156,7 @@ void VerilogStudio::ChangeLine::AddToTopModule(std::string& fileName,std::string
     WriteFile(fileName);
 }
 
+/**********************************************/
 void VerilogStudio::ChangeLine::GetTopModuleName(std::string &TMFN) {
     TopModuleFileName = TMFN;
 }

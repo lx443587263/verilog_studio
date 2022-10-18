@@ -8,6 +8,8 @@
 /**********************************************/
 void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
     //string jsonname = "/Users/liuxi/CLionProjects/verilog_studio/temp.json";
+    logger = spdlog::basic_logger_mt("verilog_studio", "logs/basic-log.txt");
+    logger->info("welcome to verilog_stuio!");
     shared_ptr<cmdline::parser> cmdparse = cmdline::parser::makeB_OBJ<cmdline::parser>();
     pParse = Parse::makeB_OBJ<Parse>();
     pHierarchy = Hierarchy::makeB_OBJ<Hierarchy>();
@@ -42,17 +44,18 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         string JsonPath = cmdparse->get<string>("input");
         pParse->ReadJson(JsonPath);
         auto end = chrono::steady_clock::now();
-        cout << "ReadJson use time:"<<chrono::duration_cast<chrono::milliseconds>(end-start).count()<<endl;
+        cout << "ReadJson use time:" << chrono::duration_cast<chrono::milliseconds>(end - start).count() << endl;
 
 
         start = chrono::steady_clock::now();
+
         pool.enqueue([&]() {
             for (auto &itr: FileNameVec) {
                 pParse->ParseVerilog(itr);
             }
         });
         end = chrono::steady_clock::now();
-        cout << "ParseVerilog use time:"<<chrono::duration_cast<chrono::milliseconds>(end-start).count()<<endl;
+        cout << "ParseVerilog use time:" << chrono::duration_cast<chrono::milliseconds>(end - start).count() << endl;
     }
 
     if (cmdparse->exist("filelist")) {
@@ -64,6 +67,7 @@ void VerilogStudio::CmdParse::CmdLineParse(int argc, char **argv) {
         FileNameStr();
         string JsonPath = CreateVerilogJson();
         if (JsonPath.empty()) {
+            logger->error("JsonPath is empty");
             cerr << "JsonPath is empty" << endl;
         }
 
@@ -193,8 +197,9 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
     auto tr = pHierarchy->CreateTree(TopModuleName, pParse);
     htree<string>::iterator iter(tr.root);
     vector<string> InstModuleNamePath;
-    string PortName,leftPortName,rightPortName,virTopModule;
-    if(connectRule.find("=>")!=string::npos){
+    string PortName, leftPortName, rightPortName, virTopModule;
+    if (connectRule.find("=>") != string::npos) {
+        ToTopFlag = false;
         vector<string> tempPath = split(connectRule, "=>");
         //tempPath[1] = Trim(tempPath[1]);
         vector<string> path1 = split(tempPath[0], ".");
@@ -210,84 +215,111 @@ void VerilogStudio::CmdParse::AddLine(string &connectRule) {
             rightPortName = "No";
         };
         path1.pop_back();
-        if(tr.root->ModuleName.empty()){
-            cout << "tree is empty()"<<endl;
+        if (tr.root->ModuleName.empty()) {
+            logger->error("tree is empty");
+//            cout << "tree is empty()" << endl;
         }
-        for(auto &it:path1){
-            pParse->GetSrcModuleName(iter,it,path1.back());
+        for (auto &it: path1) {
+            pParse->GetSrcModuleName(iter, it, path1.back());
         }
-        iter=tr.root;
-        for(auto &it:path2){
-            pParse->GetSrcModuleName(iter,it,path2.back());
+        iter = tr.root;
+        for (auto &it: path2) {
+            pParse->GetSrcModuleName(iter, it, path2.back());
         }
         InstModuleNamePath = pHierarchy->MergePath(path1, path2);
         virTopModule = pHierarchy->GetVirTopModule();
 
         cout << "tempath[0]:" << tempPath[0] << endl;
         cout << "tempath[1]:" << tempPath[1] << endl;
-        cout << "leftPortName:"<<leftPortName <<endl;
-        cout << "rightPortName:"<<rightPortName<<endl;
-        cout << "portName:" <<PortName<<endl;
-        cout << "portName:" <<PortName<<endl;
-
-    }else{
-        cout <<"root:"<<tr.root->ModuleName <<endl;
+        cout << "leftPortName:" << leftPortName << endl;
+        cout << "rightPortName:" << rightPortName << endl;
+        cout << "portName:" << PortName << endl;
+        logger->info("tempath[0]:{}", tempPath[0]);
+        logger->info("tempath[1]:{}", tempPath[1]);
+        logger->info("leftPortName:{}", leftPortName);
+        logger->info("rightPortName:{}", rightPortName);
+        logger->info("portName:{}", PortName);
+    } else {
+        ToTopFlag = true;
+        cout << "root:" << tr.root->ModuleName << endl;
         vector<string> path1 = split(connectRule, ".");
         leftPortName = path1.back();
+        logger->info("leftPortName:{}", leftPortName);
+        pParse->AddTopModuleKV(TopModuleName, path1[0]);
         PortName = leftPortName;
         rightPortName = leftPortName;
         path1.pop_back();
-        if(tr.root->ModuleName.empty()){
-            cout << "tree is empty()"<<endl;
+        if (tr.root->ModuleName.empty()) {
+            logger->error("tree is empty");
+//            cout << "tree is empty" << endl;
         }
-        for(auto &it:path1){
-            pParse->GetSrcModuleName(iter,it,path1.back());
+        for (auto &it: path1) {
+            pParse->GetSrcModuleName(iter, it, path1.back());
         }
         path1.swap(InstModuleNamePath);
         virTopModule = InstModuleNamePath.at(0);
     }
 
     string FlipModule = pHierarchy->GetFlipModule();
-    cout << "FlipModule:" << FlipModule << endl;
     string lastModuleName = InstModuleNamePath.back();
-    cout << "lastModuleName:" << lastModuleName << endl;
     //pParse->GetKVInstModule(InstModuleNamePath,virTopModule);
     pParse->ShowKvInstModule();
-    cout << "virTopModule:" << virTopModule << endl;
     string getVirTopModuleFile = pParse->GetSourceFileName(virTopModule);
-    cout << "getVirTopModuleFile:" << getVirTopModuleFile << endl;
     pChangeLine->GetTopModuleName(getVirTopModuleFile);
-
-//    pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
+    cout << "FlipModule:" << FlipModule << endl;
+    cout << "lastModuleName:" << lastModuleName << endl;
+    cout << "virTopModule:" << virTopModule << endl;
+    cout << "getVirTopModuleFile:" << getVirTopModuleFile << endl;
+    logger->info("FlipModule:{}", FlipModule);
+    logger->info("lastModuleName:{}", lastModuleName);
+    logger->info("virTopModule:{}", virTopModule);
+    logger->info("getVirTopModuleFile:{}", getVirTopModuleFile);
+    //pChangeLine->RemoveTopModule(TopModuleName, InstModuleNamePath);
     for (auto &it: InstModuleNamePath) {
-        cout << "\nInstModuleNamePath:" << it << endl;
-
         string tempSourceFileName = pParse->GetSourceFileName(it);
-        cout << "tempSourceFileName:" << tempSourceFileName << endl;
-
         string tempPortEnd = pParse->GetPortEnd(it);
-        cout << "tempPortEnd:" << tempPortEnd << endl;
         string tempSrcModule = pParse->GetSourceModuleName(it);
-        cout << "tempSrcModule:" << tempSrcModule << endl;
         int tempBracketsLocation = pParse->GetBracketsLocation(it);
-        cout << "tempBracketslocation:" << tempBracketsLocation << endl;
         int tempEndBracketsLocation = pParse->GetEndBracketsLocation(it);
         string tempInstFileName = pParse->GetInstLocationFileName(it);
-        cout << "tempInstFileName:" << tempInstFileName << endl;
-        if (it == virTopModule) {
-            pChangeLine->AddToTopModule(tempSourceFileName, PortName, tempPortEnd, tempBracketsLocation, tempEndBracketsLocation);
-        } else {
-            if (it == FlipModule) {
-                if (rightPortName == "No") {
-                    PortName = pChangeLine->FlipPort(leftPortName);
-                } else {
-                    PortName = rightPortName;
-                }
-            }
+        if (ToTopFlag) {
             pChangeLine->AddPort(tempSourceFileName, PortName, tempPortEnd, tempSrcModule, tempBracketsLocation, tempEndBracketsLocation);
-            pChangeLine->AddInstPort(tempInstFileName, PortName, it);
+            if (it != virTopModule) {
+                pChangeLine->AddInstPort(tempInstFileName, PortName, it);
+            }
+        } else {
+            if (it == virTopModule) {
+                pChangeLine->AddToTopModule(tempSourceFileName, PortName, tempPortEnd, tempBracketsLocation, tempEndBracketsLocation);
+            } else {
+                if (it == FlipModule) {
+                    if (rightPortName == "No") {
+                        PortName = pChangeLine->FlipPort(leftPortName);
+                    } else {
+                        PortName = rightPortName;
+                    }
+                }
+                pChangeLine->AddPort(tempSourceFileName, PortName, tempPortEnd, tempSrcModule, tempBracketsLocation, tempEndBracketsLocation);
+                pChangeLine->AddInstPort(tempInstFileName, PortName, it);
+            }
         }
-
+//        spdlog::info("InstModuleNamePath:{}", it);
+//        spdlog::info("tempSourceFileName:{}", tempSourceFileName);
+//        spdlog::info("tempPortEnd:{}", tempPortEnd);
+//        spdlog::info("tempSrcModule:{}", tempSrcModule);
+//        spdlog::info("tempBracketslocation:{}", tempBracketsLocation);
+//        spdlog::info("tempInstFileName:{}", tempInstFileName);
+        cout << "\nInstModuleNamePath:" << it << endl;
+        cout << "tempSourceFileName:" << tempSourceFileName << endl;
+        cout << "tempPortEnd:" << tempPortEnd << endl;
+        cout << "tempSrcModule:" << tempSrcModule << endl;
+        cout << "tempBracketslocation:" << tempBracketsLocation << endl;
+        cout << "tempInstFileName:" << tempInstFileName << endl;
+        logger->info("InstModuleNamePath:{}", it);
+        logger->info("tempSourceFileName:{}", tempSourceFileName);
+        logger->info("tempPortEnd:{}", tempPortEnd);
+        logger->info("tempSrcModule:{}", tempSrcModule);
+        logger->info("tempBracketslocation:{}", tempBracketsLocation);
+        logger->info("tempInstFileName:{}", tempInstFileName);
     }
 
 }

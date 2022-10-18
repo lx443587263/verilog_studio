@@ -162,6 +162,7 @@ string VerilogStudio::Hierarchy::GetFlipModule() {
     return FlipModule;
 }
 
+/**********************************************/
 string VerilogStudio::Hierarchy::GetVirTopModule() {
     return virTopModule;
 }

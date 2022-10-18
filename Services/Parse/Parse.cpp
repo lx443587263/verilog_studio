@@ -5,18 +5,30 @@
 /************************************************
  *******************header***********************
  ************************************************/
+
 #include "Parse.hpp"
+#include <chrono>
+#include <unistd.h>
 
 /**********************************************/
 void VerilogStudio::Parse::ReadJson(string &JsonFile) {
-    ifstream in(JsonFile.data());
-    if (!in.is_open())
-        cerr << "err here:" << __FILE__ << __LINE__ << endl;
+    char readBuffer[65536];
+    FILE* fp = fopen(JsonFile.c_str(), "r");
+    //ifstream in(JsonFile.data());
+//    if (!in.is_open())
+//        cerr << "err here:" << __FILE__ << __LINE__ << endl;
 
-    string json_content((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
-    in.close();
+    auto start = chrono::steady_clock::now();
+    //string json_content((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+    FileReadStream json_content(fp, readBuffer, sizeof(readBuffer));
+    auto end = chrono::steady_clock::now();
 
-    ParseResult result = doc.Parse(json_content.c_str());
+    //in.close();
+    //ParseResult result = doc.Parse(json_content.c_str());
+
+    ParseResult result = doc.ParseStream(json_content);
+    cout << "result use time:"<<chrono::duration_cast<chrono::milliseconds>(end-start).count()<<endl;
+    fclose(fp);
     if (!result) {
         cerr << "JSON parse error:" << GetParseErrorFunc(result.Code()), result.Offset();
     }
@@ -366,7 +378,7 @@ void VerilogStudio::Parse::GetModuleName(Value::MemberIterator &ModuleNameItr) {
         if (mHeader->IsObject()) {
             for (auto moduleName = mHeader->GetObject().MemberBegin(); moduleName != mHeader->GetObject().MemberEnd(); ++moduleName) {
                 if (moduleName->value.IsString() && moduleName->value == "SymbolIdentifier" && (moduleName + 1)->name == "text") {
-                    cout << (moduleName + 1)->value.GetString() << endl;
+                    //cout << (moduleName + 1)->value.GetString() << endl;
                     pModule->AddModuleName(guid, (moduleName + 1)->value.GetString());
                     KVModuleGuid[guid] = (moduleName + 1)->value.GetString();
                     ModuleNames.emplace_back((moduleName + 1)->value.GetString());
@@ -929,7 +941,6 @@ std::string VerilogStudio::Parse::FindGuid(std::string &ModuleName) {
 
 /**********************************************/
 void VerilogStudio::Parse::ShowKvInstModule() {
-    cout << "in ShowKvInstModule" <<endl;
     for(auto& it: KVInstModule){
         cout << "KVInstModule:"<<it.first<<":"<<it.second<<endl;
     }
@@ -948,7 +959,7 @@ void VerilogStudio::Parse::GetSrcModuleName(VerilogStudio::htree<std::string>::i
 
     if(iter._node->ModuleName == moduleName){
         if(iter._node->KVInstModule.empty()){
-            KVInstModule[iter._node->ModuleName];
+            KVInstModule[iter._node->ModuleName] = iter._node->ModuleName;
         }else{
             for(auto& itr2:iter._node->KVInstModule){
                 KVInstModule[itr2.first] = itr2.second;
@@ -965,6 +976,13 @@ void VerilogStudio::Parse::GetSrcModuleName(VerilogStudio::htree<std::string>::i
     }
 
 }
+
+/**********************************************/
+void VerilogStudio::Parse::AddTopModuleKV(string &name, string &instName) {
+    KVInstModule[instName] = name;
+}
+
+
 
 
 

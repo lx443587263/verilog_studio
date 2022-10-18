@@ -20,6 +20,10 @@
 #include "../DrawTree/DrawTree.hpp"
 #include "../../Common/Supporting/ThreadPool.hpp"
 #include "../ChangeLine/ChangeLine.hpp"
+#include "../../spdlog/spdlog.h"
+#include "../../spdlog/sinks/basic_file_sink.h"
+
+
 
 /*************************************************************/
 namespace VerilogStudio {
@@ -54,14 +58,16 @@ namespace VerilogStudio {
 
     /**********************************************/
     private:
-        vector<string>              FileNameVec;
-        string                      AllFileName;
-        string                      TopModuleName;
-        shared_ptr<Parse>           pParse;
-        shared_ptr<Hierarchy>       pHierarchy;
-        shared_ptr<DrawTree>        pDraw;
-        shared_ptr<ChangeLine>      pChangeLine;
-        vector<string>              ChangeLineContent;
+        vector<string>                      FileNameVec;
+        string                              AllFileName;
+        string                              TopModuleName;
+        shared_ptr<Parse>                   pParse;
+        shared_ptr<Hierarchy>               pHierarchy;
+        shared_ptr<DrawTree>                pDraw;
+        shared_ptr<ChangeLine>              pChangeLine;
+        vector<string>                      ChangeLineContent;
+        bool                                ToTopFlag = false;
+        shared_ptr<spdlog::logger>          logger;
     };
 }
 

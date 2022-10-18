@@ -18,7 +18,7 @@ endif()
 include_directories(${INC_DIR})
 link_directories(${LINK_DIR})
 
-add_executable(verilog_studio main.cpp rapidjson graphviz
+add_executable(verilog_studio main.cpp rapidjson spdlog graphviz
         Services/Parse/Parse.cpp
         Services/Parse/Parse.hpp
         Services/Module/Module.cpp

@@ -52,6 +52,7 @@ namespace VerilogStudio{
 
         ~Parse() {}
 
+
         /*********************************************
         ****************parse verilog*****************
         **********************************************/
@@ -117,6 +118,7 @@ namespace VerilogStudio{
 
         void GetSrcModuleName(htree<string>::iterator& iter,std::string& moduleName,std::string& lastModuleName);
 
+        void AddTopModuleKV(string& name, string& instName);
 
 
         /********************************************/
