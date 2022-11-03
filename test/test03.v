@@ -1,8 +1,16 @@
-module adder( combo,clk, rst_n, a, b, c);
-    output [1:0] combo;
-    input [3:0] a;
-	input [3:0] b;
+module adder(clk, rst_n, a, b, c);
+    input [3:0] b;
 	output [7:0] c;
+    input       wire        in_test00001;
+    
+    input       wire        in_test00001;
+    
+    input       wire        in_test00001;
+    
+    input       wire        in_test00001;
+    
+    input       wire        in_test00001;
+    
     input clk, rst_n;
 
     wire [3:0] a;
@@ -21,10 +29,9 @@ module adder( combo,clk, rst_n, a, b, c);
 	);
 
     counter110 test_101(
-        . combo( combo),
-
-        .rstn11(rstn1),
-        .clk1(clk1),
+        .in_test00001(in_test00001),
+        
+        .in_test00001(in_test00001),
         .cnt1(cnt1),
         .cout1(cout1),
         .cnt_temp1()

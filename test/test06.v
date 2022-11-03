@@ -3,15 +3,12 @@ module counter110#(
     parameter APB_ADDR_WIDTH  = 8,
     parameter APB_DATA_WIDTH  = 8
     )(
-    output [1:0] combo,
-    input       wire        rstn1,
-    input       wire        clk1,
-    output      wire[3:0]   cnt1,
-    output      wire        cout1,
+     //group a
+     input       wire        in_test00001,
+     //end group a
+     reg [3:0]               cnt_temp1 );
 
-    reg [3:0]               cnt_temp1 );
-
-    always@(posedge clk or negedge rstn) begin
+  always@(posedge clk or negedge rstn) begin
         if(! rstn)begin
             cnt_temp        <= 4'b0 ;
         end

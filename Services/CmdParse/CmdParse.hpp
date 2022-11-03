@@ -52,9 +52,9 @@ namespace VerilogStudio {
 
         vector<string> split(const string& str,const string& delims);
 
-        string& Trim(string& str);
-
         void AddLine(string& connectRule);
+
+        void AddGroup(string& connectRule);
 
     /**********************************************/
     private:
@@ -68,6 +68,7 @@ namespace VerilogStudio {
         vector<string>                      ChangeLineContent;
         bool                                ToTopFlag = false;
         shared_ptr<spdlog::logger>          logger;
+        //htree<string>                       tr;
     };
 }
 

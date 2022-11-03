@@ -856,6 +856,7 @@ std::string VerilogStudio::Parse::GetSourceFileName(std::string &ModuleName) {
             if (it.first == ModuleName) {
                 temp = ModuleName;
             }
+            cout << it.first <<":"<< it.second  <<endl;
         }
     }
 

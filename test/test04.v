@@ -1,8 +1,11 @@
 //单 bit 全加器，指定路径延迟
 module full_adder1(
-    input [1:0] combo,
     input   Ai, Bi, Ci,
-    output  So, Co);
+    output  So, Co,
+    //group a
+    output       wire        out_test00001,
+    //end group a
+    );
 
    assign So = Ai ^ Bi ^ Ci ;
    assign Co = (Ai & Bi) | (Ci & (Ai | Bi));

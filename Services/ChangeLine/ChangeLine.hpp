@@ -44,7 +44,21 @@ namespace VerilogStudio {
 
         void GetTopModuleName(string& TopModuleName);
 
-    /********************************************/
+        string GetGroupPortName(string& sourceFileName,string& group);
+
+        vector<string> GetPortName(vector<string> portGather);
+
+        string InstGroupPortName(string& fileName,vector<string>& portNameGather);
+
+        string& Trim(string& str);
+
+        void AddGroupPort(string &fileName,vector<string>& portGather,string& portEnd,string& sourceModule,int bracketsLocation, int endBracketsLocation);
+
+        void AddGroupToTopModule(string& fileName,vector<string>& portNameGather,string& portEnd,int bracketsLocation,int endBracketsLocation);
+
+        vector<string> ComposeGroupPortName(vector<string>& portTypeNameGather,vector<string>& portName,string &portEnd);
+
+        /********************************************/
     private:
         string                              FileContent;
         string                              TopModuleFileName;
